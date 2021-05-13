@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { AuthenticationService } from "../../services/authentication.service";
 import { RemoteService } from "../../services/remote.service";
 import { data } from "../../data/rounds";
-import { getApiUrl } from "../../helpers/apiUrl";
 
 declare const window: any;
 
@@ -27,7 +26,7 @@ export class HomeComponent {
     public currentRoundIdx: number = parseInt(localStorage.getItem("currentRoundIdx2") ? localStorage.getItem("currentRoundIdx2") : "0", undefined);
     public endCityName = data.rounds[this.currentRoundIdx]
         .cities[data.rounds[this.currentRoundIdx].cities.length - 1].name;
-    public mapSrc = `${getApiUrl()}statistics/currentMap.png`
+    public mapSrc = "/api/statistics/currentMap.png"
     public confettiTimeout: number;
     public data = data;
     public canAddWays = false;

@@ -2,7 +2,6 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
-import { getApiUrl } from "../helpers/apiUrl";
 import { AlertService } from "./alert.service";
 
 @Injectable({
@@ -56,19 +55,19 @@ export class RemoteService {
     private getRequest(type: string, path: string, args: any): Observable<any> {
         let req;
         if (type == "get") {
-            req = this.http.get<any>(`${getApiUrl()}${path}`, {
+            req = this.http.get<any>(`/api/${path}`, {
                 ...args,
             });
         } else if (type == "post") {
-            req = this.http.post<any>(`${getApiUrl()}${path}`, {
+            req = this.http.post<any>(`/api/${path}`, {
                 ...args,
             });
         } else if (type == "put") {
-            req = this.http.put<any>(`${getApiUrl()}${path}`, {
+            req = this.http.put<any>(`/api/${path}`, {
                 ...args,
             });
         } else if (type == "delete") {
-            req = this.http.delete<any>(`${getApiUrl()}${path}`, {
+            req = this.http.delete<any>(`/api/${path}`, {
                 ...args,
             });
         }

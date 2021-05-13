@@ -6,7 +6,6 @@ import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { from } from "rxjs";
 import { RemoteService } from "../../services/remote.service";
-import { getApiUrl } from "../../helpers/apiUrl";
 import { grades } from "../../data/grades";
 
 @Component({
@@ -47,7 +46,7 @@ export class SignupComponent implements OnInit {
         this.submitted = true;
         if (!this.signupForm.invalid && this.f.password.value == this.f.passwordVerify.value) {
             this.loading = true;
-            this.httpClient.post(`${getApiUrl()}users`, {
+            this.httpClient.post("/api/users", {
                 username: this.f.username.value,
                 realName: this.f.name.value,
                 password: this.f.password.value,
