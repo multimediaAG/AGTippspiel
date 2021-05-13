@@ -32,11 +32,16 @@ export class HomeComponent {
     public canAddWays = false;
     public showStadtradelnInfo: boolean = new Date("2020-06-10") < new Date() && new Date() < new Date("2020-07-14");
 
+    public matches = [];
+
     constructor(public authenticationService: AuthenticationService,
         private remoteService: RemoteService) { }
 
     public ngOnInit() {
         this.currentDistanceLoaded = false;
+        this.remoteService.get("matches").subscribe((d) => {
+            this.matches = d;
+        });
         this.remoteService.get("statistics/currentDistance").subscribe((d) => {
             if (d && (d.currentDistance || d.currentDistance === null)) {
                 localStorage.setItem("finished2", d.finished ? "true" : "false");

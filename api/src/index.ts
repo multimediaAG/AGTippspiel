@@ -1,19 +1,20 @@
 import * as bodyParser from "body-parser";
+import { getConfig } from "container-env";
 import * as cors from "cors";
 import * as express from "express";
+import * as fs from "fs";
 import * as helmet from "helmet";
 import * as path from "path";
 import { createConnection } from "typeorm";
+import { MatchController } from "./controllers/MatchController";
 import { User } from "./entity/User";
 import { Way } from "./entity/Way";
 import { createAdminUser1574018391679 } from "./migration/1574018391679-createAdminUser";
 import routes from "./routes";
 import { log } from "./utils/utils";
-import * as fs from "fs";
-import { RoundController } from "./controllers/RoundController";
-import { getConfig } from "container-env";
 
-const config = getConfig(JSON.parse(fs.readFileSync(path.join(__dirname, "../../container-env.json")).toString()), "/app/config/agtippspiel-config.json");
+const config = getConfig(JSON.parse(fs.readFileSync(path.join(__dirname, "../../container-env.json"))
+  .toString()), "/app/config/agtippspiel-config.json");
 
 // Connects to the Database -> then starts the express
 createConnection({
@@ -42,9 +43,11 @@ createConnection({
 })
   .then(async (connection) => {
 
-    if (!fs.existsSync("/data")) fs.mkdirSync("/data");
-    if (!fs.existsSync(path.join("/data/agtippspiel.log"))) fs.writeFileSync(path.join("/data/agtippspiel.log"), "");
-    RoundController.init();
+    if (!fs.existsSync("/data")) { fs.mkdirSync("/data"); }
+    if (!fs.existsSync(path.join("/data/agtippspiel.log"))) {
+      fs.writeFileSync(path.join("/data/agtippspiel.log"), "");
+    }
+    MatchController.init();
     log("server started", null);
 
     // Fix problems with UTF8 chars

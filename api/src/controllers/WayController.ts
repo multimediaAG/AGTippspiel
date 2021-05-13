@@ -3,7 +3,7 @@ import { getRepository } from "typeorm";
 import { Way } from "../entity/Way";
 import { User } from "../entity/User";
 import { log } from "../utils/utils";
-import { RoundController } from "./RoundController";
+import { MatchController } from "./MatchController";
 
 class WayController {
     public static listAll = async (req: Request, res: Response) => {
@@ -18,7 +18,7 @@ class WayController {
     }
 
     public static editWay = async (req: Request, res: Response) => {
-        if (!await RoundController.roundRunning(true)) {
+        /* if (!await MatchController.roundRunning(true)) {
             WayController.roundFinishedMessage(res);
             return;
         }
@@ -40,12 +40,12 @@ class WayController {
             res.status(500).send({ message: err });
             return;
         }
-        RoundController.staticUpdateRoundIdxUpdatedDate();
-        res.send({ status: true });
+        MatchController.staticUpdateRoundIdxUpdatedDate();
+        res.send({ status: true }); */
     }
 
     public static newWay = async (req: Request, res: Response) => {
-        if (!await RoundController.roundRunning(true)) {
+        /* if (!await MatchController.roundRunning(true)) {
             WayController.roundFinishedMessage(res);
             return;
         }
@@ -60,7 +60,7 @@ class WayController {
         way.distance = distance;
         way.date = date;
         way.type = type;
-        way.roundIdx = RoundController.getRoundIdx();
+        way.roundIdx = MatchController.getRoundIdx();
         way.user = await getRepository(User).findOne(res.locals.jwtPayload.userId);
 
         try {
@@ -70,12 +70,12 @@ class WayController {
             res.status(500).send({ message: `Fehler: ${e.toString()}` });
             return;
         }
-        RoundController.staticUpdateRoundIdxUpdatedDate();
-        res.status(200).send({ status: true });
+        MatchController.staticUpdateRoundIdxUpdatedDate();
+        res.status(200).send({ status: true }); */
     }
 
-    public static deleteWay = async (req: Request, res: Response) => {
-        if (!await RoundController.roundRunning(true)) {
+    public static deleteWay = async (req: Request, res: Response) => { /*
+        if (!await MatchController.roundRunning(true)) {
             WayController.roundFinishedMessage(res);
             return;
         }
@@ -88,11 +88,11 @@ class WayController {
             res.status(404).send({ message: "Diese Strecke wurde nicht gefunden!" });
             return;
         }
-        res.status(200).send({ status: true });
+        res.status(200).send({ status: true }); */
     }
 
     private static roundFinishedMessage(res: Response) {
-        res.status(400).send({ message: "Die Runde ist schon vorbei, es können keine Strecken mehr eingetragen werden!" });
+        // res.status(400).send({ message: "Die Runde ist schon vorbei, es können keine Strecken mehr eingetragen werden!" });
     }
 }
 
