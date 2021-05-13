@@ -1,0 +1,62 @@
+name: Build
+
+on: [push]
+
+jobs:
+  build_api:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macOS-latest]
+    name: API on ${{matrix.os}}
+    runs-on: ${{matrix.os}}
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+    - name: Install dependencies
+      working-directory: api
+      run: npm i
+    - name: Build
+      working-directory: api
+      run: npm run build
+  build_web:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macOS-latest]
+    name: Web on ${{matrix.os}}
+    runs-on: ${{matrix.os}}
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+    - name: Install dependencies
+      working-directory: AGTippspiel
+      run: npm i
+    - name: Build
+      working-directory: AGTippspiel
+      run: npm run build
+  build_docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14.16.0
+    - name: Install frontend dependencies
+      working-directory: AGTippspiel
+      run: npm i
+    - name: Install backend dependencies
+      working-directory: api
+      run: npm i
+    - name: Build
+      working-directory: docker
+      run: sudo bash ./build.sh
+    - name: Deploy to Docker Hub
+      working-directory: docker
+      run: sudo bash ./deploy.sh ${{ secrets.DOCKER_HUB_USERNAME }} ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}    

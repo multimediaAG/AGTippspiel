@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "./variables.scss";
+@import "~bootstrap/scss/bootstrap.scss";
+@import "~ngx-toastr/toastr";
+@import "~@fortawesome/fontawesome-free/css/all.css";
+.distanceIndicator {
+    width: 5rem;
+    height: .6rem;
+}
+
+.big-badge {
+    font-size: 100%;
+    padding-top: 0;
+}

@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="row">
+        <div class="col-11 col-md-8 mx-auto card p-3 mt-5">
+            <div class="text-center mb-3">
+                <h3>Bestenliste</h3>
+            </div>
+            <!--<ul class="nav nav-tabs mb-2">
+                <li class="nav-item" *ngFor="let r of rounds">
+                    <a class="nav-link" [class.active]="currentViewRoundIdx == r" (click)="viewRound(r)" [routerLink]="">{{r + 1}}. Runde</a>
+                </li>
+            </ul>-->
+            <ul class="nav nav-tabs">
+                <li class="nav-item" *ngFor="let v of views">
+                    <a class="nav-link" [class.active]="currentView.id == v.id" (click)="view(v)" [routerLink]="">{{v.name}}</a>
+                </li>
+            </ul>
+            <div class="alert alert-success my-3" *ngIf="authenticationService.loggedIn && myPlace">
+                Du bist auf <b>Platz {{myPlace}}</b> von {{placesCount}} in der <i>{{currentViewRoundIdx + 1}}. Runde</i> in der Kategorie <i>{{currentView.name}}</i>.
+            </div>
+            <div class="table-responsive mt-1">
+                <table class="table table-striped border-top-0">
+                    <thead>
+                        <tr>
+                            <th class="border-top-0">Platz</th>
+                            <th class="border-top-0" *ngIf="currentView.id != 'grades-absolute' && currentView.id != 'grades-relative'">Benutzer</th>
+                            <th class="border-top-0">Klasse</th>
+                            <th class="border-top-0" colspan="2">Strecke</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of users">
+                            <td>{{user.place}}</td>
+                            <td *ngIf="currentView.id != 'grades-absolute' && currentView.id != 'grades-relative'">{{user.username}}</td>
+                            <td>{{user.grade}}</td>
+                            <td>{{user.distance}} km</td>
+                            <td>
+                                <div class="progress distanceIndicator">
+                                    <div class="progress-bar" role="progressbar" [style.width]="user.distance / maxDistance * 100 + '%'"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <info-bike-distance></info-bike-distance>
+            </div>
+        </div>
+    </div>
+</div>

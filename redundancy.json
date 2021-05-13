@@ -1,0 +1,13 @@
+{
+    "version": 1,
+    "files": [
+        {
+            "src": "AGTippspiel/src/app/data/rounds.ts",
+            "dest": "api/src/data/"
+        },
+        {
+            "src": "AGTippspiel/src/app/data/grades.ts",
+            "dest": "api/src/data/"
+        }
+    ]
+}

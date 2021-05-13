@@ -1,0 +1,180 @@
+<div class="container">
+    <div class="text-center text-white mb-5">
+        <h1 class="mb-3 display-1 font-weight-bold headline d-block d-md-none"><i>AG</i>tiv</h1>
+        <h1 class="mb-3 display-1 font-weight-bold headline d-none d-md-block"> Mach mit bei <i>AG</i>tiv!</h1>
+        <h2 class="headline">Die interaktive Radel- und Lauf-Aktion des Allg&auml;u-Gymnasiums Kempten</h2>
+    </div>
+    <div class="mb-3 alert alert-success d-block d-lg-none text-center" *ngIf="finished && !canAddWays">
+        <b>Sieger der Gesamtwertung</b> ist <b>{{bestUsers[0].username}} ({{bestUsers[0].grade}})</b> mit {{bestUsers[0].distance}} km.<br>Herzlichen Glückwunsch!
+    </div>
+    <div class="card mb-4 border-0 bg-transparent" *ngIf="finished">
+        <img src="assets/finished_{{currentRoundIdx}}.svg">
+        <div class="bg-white p-3 pt-0 stats-container text-center">
+            <div class="alert alert-success d-none d-lg-block" *ngIf="finished && !canAddWays">
+                <b>Sieger der Gesamtwertung</b> ist <b>{{bestUsers[0].username}} ({{bestUsers[0].grade}})</b> mit {{bestUsers[0].distance}} km.<br>Herzlichen Glückwunsch!
+            </div>
+            <div class="alert alert-primary">
+                <b>{{userCount}} Teilnehmer</b> haben
+                <b>{{currentDistance}} km</b> gesammelt!
+            </div>
+            <div class="alert alert-success" *ngIf="authenticationService.loggedIn">
+                Du hast davon <b>{{myDistance}} km</b> beigetragen!
+            </div>
+            <div class="alert alert-warning mb-1">
+                Weitere Statistiken gibt es unten <i class="fas fa-arrow-down"></i>.
+            </div>
+        </div>
+    </div>
+    <div class="alert alert-success" *ngIf="showStadtradelnInfo">
+        <h4 class="text-center">Info zum STADTRADELN</h4>
+        <p>Im Zeitraum vom 24. Juni bis 14. Juli 2020 werden die Rad-Kilometer in AGtiv auch <b>automatisch</b> fürs STADTRADELN Kempten gesammelt.<br>Ihr müsst Euch hierfür <b>nicht extra beim STADTRADELN registrieren.</b></p>
+        <span>Sammelt in diesem Zeitraum so viele Rad-Kilometer wie möglich, denn:</span>
+        <ul>
+            <li>Jeder Kilometer auf dem Weg zur fahrradaktivsten Kommune zählt!</li>
+            <li>Fahrradfahren ist aktiver Klimaschutz!</li>
+            <li>Es wird damit ein Zeichen für vermehrte Radförderung in der Kommune gesetzt!</li>
+        </ul>
+    </div>
+    <div class="card p-3 mb-3">
+        <h3 class="text-center" *ngIf="!authenticationService.loggedIn">
+            <i class="fa fa-running text-secondary pt-5 d-inline d-md-none mr-2"></i>Liebe Mitglieder der Schulgemeinschaft!
+            <i class="fa fa-bicycle text-secondary pt-5 d-inline d-md-none ml-2"></i>
+        </h3>
+        <div class="alert alert-warning" *ngIf="authenticationService.loggedIn && authenticationService.currentUser.hasHiddenWays">
+            <b>Wichtig!</b><br> Mindestens eine deiner eingegebenen Strecken wurde <b>ausgeblendet</b>, weil sie als Tagesleistung nicht realistisch erscheint.<br> Du kannst diese Distanz <a routerLink="/my-ways">hier anpassen</a> oder Dich bei Herrn
+            Herz über Teams melden.
+        </div>
+        <div class="d-flex justify-space-between text-center">
+            <div class="d-none d-md-block">
+                <i class="fa fa-running fa-5x text-secondary"></i><br>
+                <a href="/assets/info/Ausdauerguide_Laufen.pdf" target="_blank" class="btn btn-outline-primary mt-3">Zum Ausdauerguide Laufen</a>
+            </div>
+            <div class="px-3 pt-3">
+
+                <h3 class="text-center" *ngIf="authenticationService.loggedIn">
+                    Hallo <i>{{authenticationService.currentUser.username}}!</i>
+                </h3>
+                <p class="p-2 alert alert-success" *ngIf="finished && canAddWays">Strecken können noch <b>bis heute um 23:59 Uhr</b> eingegeben werden.</p>
+                <div [innerHtml]="replaceVariables(data.rounds[currentRoundIdx][(finished ? 'postText' : 'text')]) | safe: 'html'">
+                </div>
+                <p class="p-2 border-warning border bg-warning-light" *ngIf="!finished">Es sind <b>noch {{remainingDistance}}
+                km</b> bis nach {{endCityName}}.</p>
+                <div class="p-2 border-warning border bg-warning-light" *ngIf="!finished && bestUsers && bestUsers[0] && bestUsers[0].distance  && bestUsers[1] && bestUsers[1].distance && bestUsers[2] && bestUsers[2].distance">
+                    <span class="d-block">Die Führenden in der Gesamtwertung:</span>
+                    <div class="text-left d-inline-block">
+                        <ol>
+                            <li *ngFor="let bestUser of bestUsers"><b>{{bestUser.username}}</b> ({{bestUser.grade}}): {{bestUser.distance}} km</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="d-block d-md-none">
+                    <a href="/assets/info/Ausdauerguide_Laufen.pdf" target="_blank" class="btn btn-outline-primary mt-2 d-block">Zum Ausdauerguide Laufen <i class="fa fa-running"></i></a>
+                    <a href="/assets/info/Ausdauerguide_Bike.pdf" target="_blank" class="btn btn-outline-primary mt-2 d-block">Zum Ausdauerguide Radeln <i class="fa fa-bicycle"></i></a>
+                </div>
+            </div>
+            <div class="d-none d-md-block">
+                <i class="fa fa-bicycle fa-5x text-secondary"></i><br>
+                <a href="/assets/info/Ausdauerguide_Bike.pdf" target="_blank" class="btn btn-outline-primary mt-3">Zum Ausdauerguide Radeln</a>
+            </div>
+        </div>
+    </div>
+    <div class="card p-3 mb-4" *ngIf="!authenticationService.loggedIn && !finished">
+        <h3 class="text-center">Jetzt mitmachen!</h3>
+        <div class="embed-responsive mx-auto embed-responsive-16by9 my-3">
+            <iframe class="d-block" src="https://www.youtube-nocookie.com/embed/WIb91TIoq9U" title="Offizieller Startschuss durch Alfons Hörmann | AGtiv - Road to Tokyo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="row">
+            <a class="btn btn-outline-success col-4 mr-2 offset-2" routerLink="/signup"><i class="fas fa-user-plus"></i>
+        Registrieren</a>
+            <a class="btn btn-outline-primary col-4 ml-2" routerLink="/login"><i class="fas fa-sign-in-alt"></i> Anmelden</a>
+        </div>
+    </div>
+
+    <div class="card p-3 mb-3" *ngIf="!finished">
+        <div class="row text-center" *ngIf="currentDistanceLoaded">
+            <div class="col-12 col-sm-4">
+                <div class="info mx-auto">
+                    <i class="fas fa-map-marker-alt fa-3x text-secondary mr-2 mt-1 mb-2"></i>
+                </div>
+                <img [src]="getImg(lastCity)" class="city" alt="Letzte Stadt">
+                <div class="pt-1">
+                    {{lastCity.isExtraCity ? 'Zwischenpunkt' : ('Olympische ' + (lastCity.isSummer ? 'Sommer' : 'Winter') + 'spiele ' + lastCity.year)}} in
+                    <a [href]="lastCity.wikiUrl" target="_blank">
+                        <h3>{{ lastCity.name }}</h3>
+                    </a>
+                    in {{ lastCity.countryName }}
+                    <flag-icon class="ml-1" [country]="lastCity.country" squared></flag-icon>
+                </div>
+                <p class="mt-2"><i><read-more [text]="lastCity.text"></read-more></i></p>
+            </div>
+            <div class="col-12 col-sm-4 status">
+                <h4 class="text-center">
+                    <i class="fa fa-sign text-secondary pt-5 d-inline  mr-2"></i>
+                    <span>Zusammen haben wir erreicht:<br><b>{{currentDistance}} km</b></span>
+                </h4>
+                <h4 class="text-center" *ngIf="currentDistanceLoaded">
+                    <i class="fa fa-map-signs text-secondary pt-5 d-inline  mr-2"></i>
+                    <span>Unser nächstes Ziel erreichen wir in:<br><b>{{ nextCity.distance - currentStepDistance }} km</b></span>
+                </h4>
+
+
+                <div class="progress w-100">
+                    <div class="progress-bar" role="progressbar" [style.width]="currentStepDistance / nextCity.distance * 100 + '%'"></div>
+                </div>
+                Nur noch {{ nextCity.distance - currentStepDistance }} km bis {{ nextCity.name }}, {{ nextCity.countryName }}
+                <flag-icon [country]="nextCity.country" squared></flag-icon>
+
+                <div class="row mt-5" *ngIf="authenticationService.loggedIn">
+                    <a class="btn btn-outline-success col-4 mr-2 offset-2" routerLink="/my-ways">Meine Strecken</a>
+                    <a class="btn btn-outline-primary col-4 ml-2" routerLink="/scores">Bestenliste</a>
+                </div>
+            </div>
+            <div class="col-12 col-sm-4">
+                <div class="info mx-auto">
+                    <i class="fas fa-location-arrow fa-3x text-secondary mr-2 mt-1 mb-2"></i>
+
+                </div>
+                <img [src]="getImg(nextCity)" class="city" alt="Nächste Stadt">
+                <div class="pt-1">
+                    {{nextCity.isExtraCity ? 'Zwischenpunkt' : ('Olympische ' + (nextCity.isSummer ? 'Sommer' : 'Winter') + 'spiele ' + nextCity.year)}} in
+                    <a [href]="nextCity.wikiUrl" target="_blank">
+                        <h3>{{ nextCity.name }}</h3>
+                    </a>
+                    in {{ nextCity.countryName }}
+                    <flag-icon class="ml-1" [country]="nextCity.country" squared></flag-icon>
+                </div>
+                <p class="mt-2"><i><read-more [text]="nextCity.text"></read-more></i></p>
+            </div>
+            <div class="text-left px-5 mt-4">
+                <info-bike-distance></info-bike-distance>
+            </div>
+        </div>
+        <div class="alert alert-primary" *ngIf="!currentDistanceLoaded">
+            <i class="fas fa-spinner fa-spin"></i> Laden...
+        </div>
+    </div>
+    <div class="card p-3 mb-3" *ngIf="finished">
+        <app-statistics></app-statistics>
+    </div>
+    <div class="card p-3 mb-3">
+        <a [href]="mapSrc" target="_blank">
+            <img class="img-fluid" alt="Karte wird geladen..." [src]="mapSrc">
+        </a>
+    </div>
+    <div class="card p-3" *ngIf="passedCities && passedCities.length > 0">
+        <h2 class="text-center mb-3">Bisher besuchte Olympiastädte</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <tbody>
+                    <tr *ngFor="let city of passedCities">
+                        <td><img [src]="getImg(city)" class="city city-small" alt="Stadt"></td>
+                        <td><a [href]="city.wikiUrl" target="_blank">Olympische <b>{{city.isSummer ? 'Sommer' : 'Winter'}}spiele {{city.year}}</b></a></td>
+                        <td>in {{city.name }}, {{ city.countryName }} <flag-icon class="ml-1" [country]="city.country" squared></flag-icon></td>
+                        <td>{{city.text}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

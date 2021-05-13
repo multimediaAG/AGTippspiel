@@ -1,0 +1,32 @@
+@import "../../../variables.scss";
+.nav-item {
+    padding-left: 5px;
+    &.active {
+        border-left: 5px solid $blue;
+    }
+    &:not(.active) {
+        border-left: 5px solid transparent;
+    }
+}
+
+@media (min-width: 992px) {
+    .nav-item {
+        padding-left: 0;
+        border-left: none !important;
+        &.active {
+            border-bottom: 5px solid $blue;
+        }
+        &:not(.active) {
+            border-bottom: 5px solid transparent;
+        }
+    }
+}
+
+.navbar-brand {
+    margin-top: -3px;
+}
+
+.logo {
+    max-height: 1.8rem;
+    margin-top: -5px;
+}
