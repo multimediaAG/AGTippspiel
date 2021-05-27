@@ -2,11 +2,14 @@
     "version": 1,
     "files": [
         {
-            "src": "AGTippspiel/src/app/data/rounds.ts",
-            "dest": "api/src/data/"
+            "src": "api/src/entity/*.ts",
+            "dest": "AGTippspiel/src/app/_models/",
+            "removeDecorators": true,
+            "removeMethods": ["hashPassword", "checkIfUnencryptedPasswordIsValid"],
+            "removeImports": ["bcryptjs", "typeorm"]
         },
         {
-            "src": "AGTippspiel/src/app/data/grades.ts",
+            "src": "AGTippspiel/src/app/_data/grades.ts",
             "dest": "api/src/data/"
         }
     ]

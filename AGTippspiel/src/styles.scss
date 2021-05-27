@@ -4,12 +4,14 @@
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~ngx-toastr/toastr";
 @import "~@fortawesome/fontawesome-free/css/all.css";
-.distanceIndicator {
-    width: 5rem;
-    height: .6rem;
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-.big-badge {
-    font-size: 100%;
-    padding-top: 0;
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

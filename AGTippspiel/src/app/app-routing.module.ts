@@ -1,15 +1,14 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { RulesComponent } from "./components/rules/rules.component";
-import { HomeComponent } from "./components/home/home.component";
-import { SigninComponent } from "./components/signin/signin.component";
-import { SignupComponent } from "./components/signup/signup.component";
-import { MyWayComponent } from "./components/my-way/my-way.component";
-import { ScoresComponent } from "./components/scores/scores.component";
-import { AuthenticationGuard } from "./guards/authentication.guard";
-import { MyWaysComponent } from "./components/my-ways/my-ways.component";
-import { UsersComponent } from "./components/users/users.component";
-import { AdminGuard } from "./guards/admin.guard";
+import { RulesComponent } from "./_components/rules/rules.component";
+import { HomeComponent } from "./_components/home/home.component";
+import { SigninComponent } from "./_components/signin/signin.component";
+import { SignupComponent } from "./_components/signup/signup.component";
+import { ScoresComponent } from "./_components/scores/scores.component";
+import { AuthenticationGuard } from "./_guards/authentication.guard";
+import { UsersComponent } from "./_components/users/users.component";
+import { AdminGuard } from "./_guards/admin.guard";
+import { MatchComponent } from "./_components/match/match.component";
 
 const routes: Routes = [
     {
@@ -29,18 +28,8 @@ const routes: Routes = [
         component: SignupComponent,
     },
     {
-        path: "my-way",
-        component: MyWayComponent,
-        canActivate: [AuthenticationGuard],
-    },
-    {
-        path: "my-way/edit/:id",
-        component: MyWayComponent,
-        canActivate: [AuthenticationGuard],
-    },
-    {
-        path: "my-ways",
-        component: MyWaysComponent,
+        path: "matches",
+        component: MatchComponent,
         canActivate: [AuthenticationGuard],
     },
     {

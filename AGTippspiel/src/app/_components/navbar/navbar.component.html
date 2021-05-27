@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light pb-0 fixed-top">
+    <div class="container">
+        <a routerLink="/home"><img alt="AG Logo" src="/assets/logo.png" class="img-fluid logo me-3"></a>
+        <a class="navbar-brand pt-0" routerLink="/home">AGTippspiel</a>
+        <button class="navbar-toggler" type="button" (click)="toggleNavbar()">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent" [class.show]="!navbarCollapsed">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.loggedIn">
+                    <a class="nav-link" routerLink="/matches" (click)="navbarCollapsed = true">Spielplan</a>
+                </li>
+                <li class="nav-item" routerLinkActive="active">
+                    <a class="nav-link" routerLink="/scores" (click)="navbarCollapsed = true">Bestenliste</a>
+                </li>
+                <li class="nav-item" routerLinkActive="active">
+                    <a class="nav-link" routerLink="/rules" (click)="navbarCollapsed = true">Regeln</a>
+                </li>
+                <li class="nav-item ms-4" routerLinkActive="active" *ngIf="authenticationService.loggedIn && authenticationService.currentUser.isAdmin">
+                    <a class="nav-link" routerLink="/users" (click)="navbarCollapsed = true">Benutzer</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.loggedIn">
+                    <a class="nav-link" href (click)="authenticationService.logout()" (click)="navbarCollapsed = true"><i class="fas fa-sign-out-alt"></i> Ausloggen</a>
+                </li>
+                <li class="nav-item" routerLinkActive="active" *ngIf="!authenticationService.loggedIn">
+                    <a class="nav-link" routerLink="/signup" (click)="navbarCollapsed = true">Registrieren</a>
+                </li>
+                <li class="nav-item" routerLinkActive="active" *ngIf="!authenticationService.loggedIn">
+                    <a class="nav-link" routerLink="/login" (click)="navbarCollapsed = true">Anmelden</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

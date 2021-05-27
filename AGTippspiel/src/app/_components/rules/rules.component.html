@@ -1,0 +1,27 @@
+<div class="container pt-5">
+    <div class="card p-4">
+        <h2 class="text-center">Regeln bei <i>AG</i>tiv</h2>
+        <p>Teilnehmen kann die gesamte Schulfamilie, also alle Schülerinnen und Schüler, deren Eltern und alle Lehrkräfte des Allgäu-Gymnasiums Kempten sowie alle Mitglieder des RAVK.</p>
+        <p>Die von Euch täglich geradelten oder gelaufenen Kilometer gebt Ihr unter "Meine Strecken" ein.</p>
+        <p>Natürlich sind wir bei diesem Projekt auf die Ehrlichkeit jedes Teilnehmers angewiesen! Deshalb: <b>Schummelt nicht beim Eintragen Eurer Strecken!</b></p>
+        <p>Gewertet werden Lauf-, und Radkilometer - orientiert am Energieverbrauch der jeweiligen Sportart: Laufen x 4 und Rad x 1. So wird jede einzelne Leistung energiebedarfsgerecht gewichtet und alle können gleichermaßen zur Erdumrundung beitragen. </p>
+        <p>Eure Leistungen werden auf der Internetseite von <i>AG</i>tiv nur unter Eurem Benutzernamen, nicht unter Eurem wirklichen Namen veröffentlich! </p>
+        <p><i>AG</i>tiv trägt in diesem Jahr die olympische Fackel virtuell nach Tokyo, dem Austragungsort der olympischen Spiele 2021. Wir starten in Olympia, wo die Fackel traditionell entzündet wird und radeln bzw. laufen über alle Städte, in denen bisher olympische Spiele stattfanden, bis nach Japan. Unser Ziel ist, bis zur Eröffnung von Tokyo 2021 auch virtuell dort anzukommen. Wir zählen daher auf euch!</p>
+        <p>Jederzeit könnt ihr auf der Startseite einsehen, wo wir uns gerade befinden und wie weit es noch zum nächsten Zwischenziel ist. </p>
+        <p>Für die Jahrgangsstufen 5 bis 10 gilt: Die Klasse mit den meisten Kilometern in jeder Jahrgangsstufe wird mit der goldenen Ananas ausgezeichnet. (Inhalt wird noch nicht verraten!) </p>
+        <p>Die Q11 tritt gegen die Q12 um die goldene Ananas an! </p>
+    </div>
+
+    <div class="card p-3 mt-5">
+        <h2 class="text-center">Das Wichtigste in Kürze</h2>
+        <div *ngFor="let rule of rules" class="mb-3">
+            <div class="d-flex justify-space-between">
+                <i class="fa fa-3x text-secondary pt-3" [ngClass]="rule.icon"></i>
+                <div>
+                    <h3 class="ms-3 mb-0">{{ rule.title }}</h3>
+                    <p class="mt-0 pt-0 px-3 ">{{ rule.content }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

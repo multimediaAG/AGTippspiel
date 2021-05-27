@@ -1,0 +1,3 @@
+<countdown *ngIf="config" [config]="config" format="" class="text-muted"></countdown>
+<span class="text-success" *ngIf="!config && this.match.status == 'IN_PLAY'">Dieses Spiel läuft gerade!</span>
+<span class="text-primary" *ngIf="!config && this.match.status == 'FINISHED'">Schon vorbei!</span>
