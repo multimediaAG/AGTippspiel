@@ -27,6 +27,9 @@ export class User {
   @Column()
   public isAdmin: boolean;
 
+  @Column()
+  public isExpert: boolean;
+
   @Column({select: false})
   public password: string;
 

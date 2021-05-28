@@ -8,6 +8,7 @@ const router = Router();
 router.get("/admin", [checkJwt, checkForAdmin()], UserController.listAllAdmin);
 router.get("/", UserController.listAll);
 router.post("/:id([0-9]+)/admin", [checkJwt, checkForAdmin()], UserController.changeAdminStatus);
+router.post("/:id([0-9]+)/expert", [checkJwt, checkForAdmin()], UserController.changeExpertStatus);
 router.get("/usernameAvailable/:username", UserController.usernameAvailable);
 router.post("/", UserController.newUser);
 router.post("/:id([0-9]+)/password", [checkJwt, checkForAdmin()], UserController.changePassword);

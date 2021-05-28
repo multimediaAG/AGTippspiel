@@ -52,6 +52,18 @@ export class UsersComponent implements OnInit {
         }
     }
 
+    public changeExpertStatus(user: User, willBeExpert: boolean): void {
+        // eslint-disable-next-line
+        if (confirm(willBeExpert ? `Soll" ${user.realName}" mit dem Nicknamen "${user.username}" wirklich zum Experten gemacht werden?` : `Soll "${user.realName}" mit dem Nicknamen "${user.username}" wirklich kein Experte mehr sein?`)) {
+            this.remoteService.post(`users/${user.id}/expert`, { expert: willBeExpert }).subscribe((data) => {
+                if (data && data.status) {
+                    this.alertService.success(willBeExpert ? "Benutzer erfolgreich zum Experten gemacht!" : "Expertenstatus erfolgreich entfernt!");
+                    this.ngOnInit();
+                }
+            });
+        }
+    }
+
     public deleteUser(user: User): void {
         // eslint-disable-next-line no-restricted-globals
         if (confirm(`Soll" ${user.realName}" mit dem Nicknamen "${user.username}" wirklich gelöscht werden?`)) {

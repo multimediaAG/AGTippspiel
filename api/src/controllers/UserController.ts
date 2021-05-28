@@ -46,6 +46,7 @@ class UserController {
     user.password = password;
     user.grade = grade;
     user.isAdmin = false;
+    user.isExpert = false;
 
     user.hashPassword();
 
@@ -111,6 +112,23 @@ class UserController {
       return;
     }
     log("useradminstatus changed", { id, admin });
+    res.status(200).send({status: true});
+  }
+
+  public static changeExpertStatus = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const { expert } = req.body;
+
+    const userRepository = getRepository(User);
+    try {
+      const user = await userRepository.findOne(id);
+      user.isExpert = expert;
+      await userRepository.save(user);
+    } catch (e) {
+      res.status(500).send({message: "Konnte den Expertenstatus nicht ändern!"});
+      return;
+    }
+    log("userexpertstatus changed", { id, expert });
     res.status(200).send({status: true});
   }
 }
