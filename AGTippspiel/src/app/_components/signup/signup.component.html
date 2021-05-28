@@ -4,9 +4,6 @@
             <div class="text-center">
                 <h3>Registrieren</h3>
             </div>
-            <div class="alert alert-warning" *ngIf="currentRoundIdx && currentRoundIdx > 0">
-                <b>Achtung:</b><br> Für die {{currentRoundIdx + 1}}. Runde musst Du dich nicht erneut registrieren! Dein Account bleibt bestehen und kann weiterverwendet werden. Wenn Du bereits einen Account besitzt, kommst Du <a routerLink="/login">hier zum Login</a>.
-            </div>
             <form [formGroup]="signupForm" (ngSubmit)="signup()">
                 <div class="form-group">
                     <label for="name">Vor- und Nachname:</label>

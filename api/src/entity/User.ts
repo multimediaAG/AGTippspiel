@@ -3,15 +3,11 @@ import {
 Column,
 CreateDateColumn,
 Entity,
-JoinTable,
-ManyToMany,
-ManyToOne,
 OneToMany,
 PrimaryGeneratedColumn,
 Unique,
-UpdateDateColumn,
 } from "typeorm";
-import { Way } from "./Way";
+import { Tip } from "./Tip";
 
 @Entity()
 @Unique(["username"])
@@ -34,12 +30,15 @@ export class User {
   @Column({select: false})
   public password: string;
 
-  @OneToMany(() => Way, (way) => way.user)
-  public ways: Way[];
+  @OneToMany(() => Tip, (tip) => tip.user)
+  public tips: Tip[];
 
   @Column()
   @CreateDateColumn()
   public createdAt: Date;
+
+  public points?: number;
+  public place?: number;
 
   public hashPassword() {
     this.password = bcrypt.hashSync(this.password, 8);

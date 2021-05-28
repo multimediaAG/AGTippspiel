@@ -8,7 +8,7 @@ import {
 import { User } from "./User";
 
 @Entity()
-  export class Way {
+  export class Tip {
     @PrimaryGeneratedColumn()
     public id: number;
 
@@ -16,21 +16,18 @@ import { User } from "./User";
     public date: Date;
 
     @Column()
-    public distance: number;
+    public scoreHomeTeam: number;
 
-    @Column({default: "bike"})
-    public type: string;
-
-    @Column({default: false})
-    public hidden: boolean;
-
-    @Column({default: 0})
-    public roundIdx: number;
+    @Column()
+    public scoreAwayTeam: number;
+  
+    @Column()
+    public matchId: number;
 
     @Column()
     @CreateDateColumn()
     public createdAt: string;
 
-    @ManyToOne(() => User, (user) => user.ways, {onDelete: "CASCADE"})
+    @ManyToOne(() => User, (user) => user.tips, {onDelete: "CASCADE"})
     public user: User;
   }

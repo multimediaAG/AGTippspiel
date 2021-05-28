@@ -1,7 +1,7 @@
 # AGTippspiel
 ![Build](https://github.com/multimediaAG/AGTippspiel/workflows/Build/badge.svg)
 ![Lint](https://github.com/multimediaAG/AGTippspiel/workflows/Lint/badge.svg)
-> We bike around the globe
+> The customized soccer betting game for the UEFA Europe Championship 2020
 
 ## Development
 It's an application made with Angular for the frontend and Express for the backend. It's packed into a docker container.

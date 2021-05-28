@@ -10,7 +10,7 @@
 /* do not edit */ import { User } from "./User";
 /* do not edit */
 /* do not edit */
-/* do not edit */   export class Way {
+/* do not edit */   export class Tip {
 /* do not edit */     
 /* do not edit */     public id: number;
 /* do not edit */
@@ -18,16 +18,13 @@
 /* do not edit */     public date: Date;
 /* do not edit */
 /* do not edit */     
-/* do not edit */     public distance: number;
+/* do not edit */     public scoreHomeTeam: number;
 /* do not edit */
 /* do not edit */     
-/* do not edit */     public type: string;
-/* do not edit */
+/* do not edit */     public scoreAwayTeam: number;
+/* do not edit */   
 /* do not edit */     
-/* do not edit */     public hidden: boolean;
-/* do not edit */
-/* do not edit */     
-/* do not edit */     public roundIdx: number;
+/* do not edit */     public matchId: number;
 /* do not edit */
 /* do not edit */     
 /* do not edit */     

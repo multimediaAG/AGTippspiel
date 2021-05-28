@@ -3,12 +3,11 @@ import { getConfig } from "container-env";
 import * as cors from "cors";
 import * as express from "express";
 import * as fs from "fs";
-import * as helmet from "helmet";
 import * as path from "path";
 import { createConnection } from "typeorm";
 import { MatchController } from "./controllers/MatchController";
 import { User } from "./entity/User";
-import { Way } from "./entity/Way";
+import { Tip } from "./entity/Tip";
 import { createAdminUser1574018391679 } from "./migration/1574018391679-createAdminUser";
 import routes from "./routes";
 import { log } from "./utils/utils";
@@ -28,7 +27,7 @@ createConnection({
   // List all your entities here
   entities: [
     User,
-    Way,
+    Tip,
   ],
   host: config.DB_HOST,
   logging: false,

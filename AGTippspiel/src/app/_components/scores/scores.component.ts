@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { RemoteService } from "../../_services/remote.service";
 import { AuthenticationService } from "../../_services/authentication.service";
+import { User } from "../../_models/User";
 
 @Component({
     selector: "app-scores",
@@ -8,14 +9,10 @@ import { AuthenticationService } from "../../_services/authentication.service";
     styleUrls: ["./scores.component.scss"],
 })
 export class ScoresComponent {
-    public users: any[] = [];
-    public allUsers: any[] = [];
-    public maxDistance = 1000000000;
+    public users: User[] = [];
+    public allUsers: User[] = [];
     public myPlace: number;
     public placesCount: number;
-    public currentRoundIdx: number = parseInt(localStorage.getItem("currentRoundIdx2"), undefined);
-    public currentViewRoundIdx = this.currentRoundIdx;
-    public rounds = Array(this.currentRoundIdx + 1).fill(undefined).map((x, i) => i).reverse();
     public views = [
         {
             id: "all",
@@ -34,10 +31,6 @@ export class ScoresComponent {
             name: "Lehrer",
         },
         {
-            id: "ravk",
-            name: "RAVK",
-        },
-        {
             id: "grades-absolute",
             name: "Klassen (absolut)",
         },
@@ -51,21 +44,12 @@ export class ScoresComponent {
         public authenticationService: AuthenticationService) { }
 
     public ngOnInit() {
-        this.remoteService.get(`users/${this.currentViewRoundIdx}`).subscribe((data) => {
+        this.remoteService.get("users").subscribe((data) => {
             if (data) {
                 this.allUsers = data;
-                for (const user of this.allUsers) {
-                    // eslint-disable-next-line no-bitwise
-                    user.distance = parseInt(user.distance, undefined) | 0;
-                }
                 this.filterAndDisplayData();
             }
         });
-    }
-
-    public viewRound(idx) {
-        this.currentViewRoundIdx = idx;
-        this.ngOnInit();
     }
 
     private filterAndDisplayData() {
@@ -84,30 +68,29 @@ export class ScoresComponent {
             for (const user of this.allUsers) {
                 if (!grades[user.grade]) {
                     grades[user.grade] = {
-                        distance: 0,
+                        points: 0,
                         users: 0,
                     };
                 }
-                grades[user.grade].distance += user.distance;
+                grades[user.grade].points += user.points;
                 grades[user.grade].users++;
             }
             this.users = [];
             for (const [grade, d] of Object.entries(grades) as any) {
                 this.users.push({
                     grade,
-                    distance: this.currentView.id == "grades-absolute" ? d.distance : Math.round(d.distance / d.users),
-                });
+                    points: this.currentView.id == "grades-absolute" ? d.points : Math.round(d.points / d.users),
+                } as any);
             }
-            this.users.sort((a, b) => b.distance - a.distance);
+            this.users.sort((a, b) => b.points - a.points);
         }
-        this.maxDistance = 1000000000;
         let place = 1;
-        let lastUser;
+        let lastUser: User;
         for (const user of this.users) {
-            if (lastUser && lastUser.distance && user.distance < lastUser.distance) {
+            if (lastUser && lastUser.points && user.points < lastUser.points) {
                 place++;
             }
-            user.place = place;
+            user.points = place;
             lastUser = user;
         }
         if (this.authenticationService.loggedIn) {
@@ -127,16 +110,9 @@ export class ScoresComponent {
             }
             this.placesCount = this.users[this.users.length - 1].place;
         }
-        setTimeout(() => {
-            if (this.users.length) {
-                this.maxDistance = this.users.reduce(
-                    (p, c) => (p.distance > c.distance ? p : c),
-                ).distance;
-            }
-        }, 20);
     }
 
-    public view(v) {
+    public view(v: {id: string, name: string}): void {
         this.currentView = v;
         this.filterAndDisplayData();
     }

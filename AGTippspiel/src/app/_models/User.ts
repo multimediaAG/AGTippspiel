@@ -8,7 +8,7 @@
 
 /* do not edit */
 /* do not edit */
-/* do not edit */ import { Way } from "./Way";
+/* do not edit */ import { Tip } from "./Tip";
 /* do not edit */
 /* do not edit */
 /* do not edit */
@@ -32,11 +32,14 @@
 /* do not edit */   public password: string;
 /* do not edit */
 /* do not edit */   
-/* do not edit */   public ways: Way[];
+/* do not edit */   public tips: Tip[];
 /* do not edit */
 /* do not edit */   
 /* do not edit */   
 /* do not edit */   public createdAt: Date;
+/* do not edit */
+/* do not edit */   public points?: number;
+/* do not edit */   public place?: number;
 /* do not edit */
 /* do not edit */   
 /* do not edit */

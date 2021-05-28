@@ -3,7 +3,7 @@ import * as jwt from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import { User } from "../entity/User";
 import { log } from "../utils/utils";
-import { Way } from "../entity/Way";
+import { Tip } from "../entity/Tip";
 
 class AuthController {
 
@@ -44,10 +44,6 @@ class AuthController {
       token,
     };
     response.password = undefined;
-
-
-    const hiddenWays = await getRepository(Way).count({ where: { user, hidden: true } });
-    response.hasHiddenWays = hiddenWays > 0;
 
     // Send the jwt in the response
     log("login", { id: user.id });
