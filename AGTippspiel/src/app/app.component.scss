@@ -5,6 +5,7 @@ main {
     background-size: cover;
     transition: background-image 1s linear;
     background-attachment: fixed;
+    background-position: center;
     &.communityImage {
         background-image: url("/assets/02.jpg");
     }
