@@ -30,6 +30,9 @@ export class User {
   @Column()
   public isExpert: boolean;
 
+  @Column({default: ""})
+  public expertText: string;
+
   @Column({select: false})
   public password: string;
 

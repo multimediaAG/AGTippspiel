@@ -14,6 +14,10 @@ import { log } from "./utils/utils";
 
 const config = getConfig(JSON.parse(fs.readFileSync(path.join(__dirname, "../../container-env.json"))
   .toString()), "/app/config/agtippspiel-config.json");
+config.UPLOAD_FILE_PATH = "/app/config/pictures";
+if (!fs.existsSync(config.UPLOAD_FILE_PATH)) {
+  fs.mkdirSync(config.UPLOAD_FILE_PATH, { recursive: true });
+}
 
 // Connects to the Database -> then starts the express
 createConnection({

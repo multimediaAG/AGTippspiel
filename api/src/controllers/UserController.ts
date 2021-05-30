@@ -3,6 +3,9 @@ import { getRepository } from "typeorm";
 import { User } from "../entity/User";
 import { log } from "../utils/utils";
 import { grades } from "../data/grades";
+import * as path from "path";
+import * as fs from "fs";
+
 class UserController {
   public static listAll = async (req: Request, res: Response) => {
     const userRepository = getRepository(User);
@@ -11,6 +14,16 @@ class UserController {
       u.realName = undefined;
       return u;
     }));
+  }
+  
+  public static serveExpertPicture = async (req: Request, res: Response) => {
+    const id = req.params.id.replace(/\//g, "").replace(/\./g, "").replace(/\\/g, "");
+    const s = path.resolve(path.join(req.app.locals.config.UPLOAD_FILE_PATH, `${id}.jpg`));
+    if (fs.existsSync(s)) { 
+      res.sendFile(s);
+    } else {
+      res.status(404).send("No picture!");
+    }
   }
 
   public static listAllAdmin = async (req: Request, res: Response) => {
@@ -129,6 +142,50 @@ class UserController {
       return;
     }
     log("userexpertstatus changed", { id, expert });
+    res.status(200).send({status: true});
+  }
+
+  public static changeExpertText = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const { text } = req.body;
+
+    const userRepository = getRepository(User);
+    try {
+      const user = await userRepository.findOne(id);
+      if (!user.isExpert) {
+        res.status(500).send({message: "Dieser Nutzer ist kein Experte!"});
+        return;
+      }
+      user.expertText = text;
+      await userRepository.save(user);
+    } catch (e) {
+      res.status(500).send({message: "Konnte den Text nicht ändern!"});
+      return;
+    }
+    log("userexperttext changed", { id, text });
+    res.status(200).send({status: true});
+  }
+
+  public static uploadExpertPicture = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const { expert } = req.body;
+
+    const userRepository = getRepository(User);
+    try {
+      const user = await userRepository.findOne(id);
+      if (!user.isExpert) {
+        res.status(500).send({message: "Dieser Nutzer ist kein Experte!"});
+        return;
+      }
+      if (!req.file) {
+        throw Error("no file");
+      }
+      fs.writeFileSync(path.join(req.app.locals.config.UPLOAD_FILE_PATH, `${user.id}.jpg`), req.file.buffer);
+    } catch (e) {
+      res.status(500).send({message: "Konnte das Bild nicht hochladen!"});
+      return;
+    }
+    log("userexpertpicture changed", { id, expert });
     res.status(200).send({status: true});
   }
 }
