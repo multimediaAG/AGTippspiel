@@ -5,6 +5,7 @@ export class Match {
     utcDate: string;
     status: MatchStatus;
     stage: Stage;
+    location: string;
     group: string;
     lastUpdated: string;
     finalScore: {
@@ -12,6 +13,14 @@ export class Match {
         awayTeam: number | null;
     };
     odds: {};
+    homeTeam: {
+        id: string;
+        name: string;
+    };
+    awayTeam: {
+        id: string;
+        name: string;
+    };
     score: {
         winner: Winner;
         duration: any;
