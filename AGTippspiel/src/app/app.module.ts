@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { registerLocaleData } from "@angular/common";
 import localeDe from "@angular/common/locales/de";
 import { CountdownModule } from "ngx-countdown";
+import { AngularFileUploaderModule } from "angular-file-uploader";
 import { SafePipe } from "./_pipes/safe.pipe";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -49,6 +50,7 @@ registerLocaleData(localeDe);
         HttpClientModule,
         CountdownModule,
         ToastrModule.forRoot(),
+        AngularFileUploaderModule,
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

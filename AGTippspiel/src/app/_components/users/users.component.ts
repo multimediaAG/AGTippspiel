@@ -3,6 +3,7 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { RemoteService } from "../../_services/remote.service";
 import { AlertService } from "../../_services/alert.service";
 import { User } from "../../_models/User";
+import { AuthenticationService } from "../../_services/authentication.service";
 
 @Component({
     selector: "app-users",
@@ -12,9 +13,13 @@ import { User } from "../../_models/User";
 export class UsersComponent implements OnInit {
     public users: User[] = [];
     public userCount = 0;
-    public currentUser: User;
+    public currentExpert: User;
+    public uploadConfig: any;
+    public timestamp = Date.now();
+
     constructor(private remoteService: RemoteService,
-        private alertService: AlertService, private modalService: NgbModal) { }
+        private alertService: AlertService, private modalService: NgbModal,
+        private authService: AuthenticationService) { }
 
     public ngOnInit(): void {
         this.remoteService.get("users/admin").subscribe((data) => {
@@ -38,6 +43,50 @@ export class UsersComponent implements OnInit {
                 });
             }
         }
+    }
+
+    public getPreviewImageUrl(): string {
+        return `/api/users/${this.currentExpert.id}/expert/picture?authorization=${sessionStorage.getItem("jwt_token")}&timestamp=${this.timestamp}`;
+    }
+
+    public refreshImage(): void {
+        this.timestamp = Date.now();
+    }
+
+    public openExpertModal(expert: User, modal: any): void {
+        this.currentExpert = expert;
+        this.uploadConfig = {
+            formatsAllowed: ".jpg,.jpeg",
+            multiple: false,
+            uploadAPI: {
+                url: `/api/users/${this.currentExpert.id}/expert/picture`,
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("jwt_token")}`,
+                },
+            },
+            hideResetBtn: true,
+            hideProgressBar: true,
+            replaceTexts: {
+                selectFileBtn: "Dateien auswählen",
+                resetBtn: "Zurücksetzen",
+                uploadBtn: "Hochladen",
+                dragNDropBox: "Drag and Drop",
+                attachPinBtn: "Dateien auswählen",
+                afterUploadMsg_success: "Erfolgreich hochgeladen!",
+                afterUploadMsg_error: "Upload fehlgeschlagen",
+                sizeLimit: "Maximale Größe",
+            },
+        };
+        this.modalService.open(modal, { size: "lg" });
+    }
+
+    public saveExpert(): void {
+        this.remoteService.post(`users/${this.currentExpert.id}/expert/text`, { text: this.currentExpert.expertText }).subscribe((data) => {
+            if (data && data.status) {
+                this.alertService.success("Änderungen erfolgreich gespeichert!");
+                this.ngOnInit();
+            }
+        });
     }
 
     public changeAdminStatus(user: User, willBeAdmin: boolean): void {

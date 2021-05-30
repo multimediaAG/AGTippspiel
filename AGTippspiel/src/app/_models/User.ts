@@ -32,6 +32,9 @@
 /* do not edit */   public isExpert: boolean;
 /* do not edit */
 /* do not edit */   
+/* do not edit */   public expertText: string;
+/* do not edit */
+/* do not edit */   
 /* do not edit */   public password: string;
 /* do not edit */
 /* do not edit */   

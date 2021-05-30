@@ -29,7 +29,7 @@
                             <td><i class="fas fa-user-shield" *ngIf="user.isAdmin"></i></td>
                             <td><i class="fas fa-star text-success" *ngIf="user.isExpert"></i></td>
                             <td>
-                                <button class="btn btn-outline-success me-2" (click)="changeExpertStatus(user, !user.isExpert)"><i [class]="user.isExpert ? 'fas fa-star' : 'far fa-star'"></i></button>
+                                <button class="btn btn-outline-success me-2" (click)="user.isExpert ? openExpertModal(user, expertModal) : changeExpertStatus(user, true)"><i [class]="user.isExpert ? 'fas fa-star' : 'far fa-star'"></i></button>
                                 <button class="btn btn-outline-primary mx-2" (click)="resetUserPassword(user)"><i class="fas fa-key"></i></button>
                                 <button class="btn btn-outline-warning me-2" (click)="changeAdminStatus(user, !user.isAdmin)"><i [class]="'fas fa-user' + (user.isAdmin ? '' : '-shield')"></i></button>
                                 <button class="btn btn-outline-danger" (click)="deleteUser(user)"><i class="fas fa-trash"></i></button>
@@ -41,3 +41,42 @@
         </div>
     </div>
 </div>
+
+<ng-template #expertModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Experten bearbeiten: {{currentExpert.realName}} aka <i>{{currentExpert.username}}</i></h4>
+        <button type="button" class="btn close" (click)="modal.dismiss()">
+            <span>&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="mb-3">
+            <label for="text" class="form-label">Experten-Spruch</label>
+            <textarea class="form-control" id="text" rows="3" placeholder="Ein netter Spruch, der neben dem Experten angezeigt wird." [(ngModel)]="currentExpert.expertText"></textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Foto:</label><br>
+            <div class="row">
+                <div class="col">
+                    <div class="card p-3">
+                        <img style="width: 160px" [src]="getPreviewImageUrl()" alt="Noch kein Bild hochgeladen!">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card py-3">
+                        <p class="px-3">Größe: 160x160 Pixel</p>
+                        <angular-file-uploader [config]="uploadConfig" (ApiResponse)="refreshImage()"></angular-file-uploader>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Aktionen:</label><br>
+            <button class="btn btn-outline-success" (click)="modal.dismiss(); saveExpert()">Änderungen speichern</button>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Weitere Aktionen:</label><br>
+            <button class="btn btn-outline-danger" (click)="modal.dismiss(); changeExpertStatus(currentExpert, false)">Expertenstatus entfernen</button>
+        </div>
+    </div>
+  </ng-template>

@@ -1,15 +1,14 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { environment } from "src/environments/environment";
 import { Observable } from "rxjs";
 import { RemoteService } from "./remote.service";
+import { User } from "../_models/User";
 
 @Injectable({
     providedIn: "root",
 })
 export class AuthenticationService {
     public isLoggedIn = false;
-    public currentUser: any;
+    public currentUser: User;
 
     constructor(private remoteService: RemoteService) {
         const token = sessionStorage.getItem("jwt_token");
