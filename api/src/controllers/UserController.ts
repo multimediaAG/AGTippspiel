@@ -15,6 +15,11 @@ class UserController {
       return u;
     }));
   }
+  public static listExperts = async (req: Request, res: Response) => {
+    const userRepository = getRepository(User);
+    const experts = await userRepository.find({ relations: ["tips"], where: { isExpert: true } });
+    res.send(experts);
+  }
   
   public static serveExpertPicture = async (req: Request, res: Response) => {
     const id = req.params.id.replace(/\//g, "").replace(/\./g, "").replace(/\\/g, "");
@@ -145,9 +150,9 @@ class UserController {
     res.status(200).send({status: true});
   }
 
-  public static changeExpertText = async (req: Request, res: Response) => {
+  public static changeExpertInfo = async (req: Request, res: Response) => {
     const id = req.params.id;
-    const { text } = req.body;
+    const { text, position } = req.body;
 
     const userRepository = getRepository(User);
     try {
@@ -156,13 +161,18 @@ class UserController {
         res.status(500).send({message: "Dieser Nutzer ist kein Experte!"});
         return;
       }
-      user.expertText = text;
+      if (!text?.trim() || !position?.trim()) {
+        res.status(500).send({message: "Nicht alle Felder ausgefüllt!"});
+        return;
+      }
+      user.expertText = text.trim();
+      user.expertPosition = position.trim();
       await userRepository.save(user);
     } catch (e) {
-      res.status(500).send({message: "Konnte den Text nicht ändern!"});
+      res.status(500).send({message: "Konnte die Info nicht ändern!"});
       return;
     }
-    log("userexperttext changed", { id, text });
+    log("userexpertinfo changed", { id, text });
     res.status(200).send({status: true});
   }
 

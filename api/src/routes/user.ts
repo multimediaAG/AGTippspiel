@@ -17,11 +17,12 @@ const upload = multer({
 
 router.get("/admin", [checkJwt, checkForAdmin()], UserController.listAllAdmin);
 router.get("/", UserController.listAll);
+router.get("/experts", UserController.listExperts);
 router.post("/:id([0-9]+)/admin", [checkJwt, checkForAdmin()], UserController.changeAdminStatus);
 router.post("/:id([0-9]+)/expert", [checkJwt, checkForAdmin()], UserController.changeExpertStatus);
 router.get("/:id([0-9]+)/expert/picture", [checkJwt], UserController.serveExpertPicture);
 router.post("/:id([0-9]+)/expert/picture", [checkJwt, checkForAdmin(), upload.single("file0")], UserController.uploadExpertPicture);
-router.post("/:id([0-9]+)/expert/text", [checkJwt, checkForAdmin()], UserController.changeExpertText);
+router.post("/:id([0-9]+)/expert/info", [checkJwt, checkForAdmin()], UserController.changeExpertInfo);
 router.get("/usernameAvailable/:username", UserController.usernameAvailable);
 router.post("/", UserController.newUser);
 router.post("/:id([0-9]+)/password", [checkJwt, checkForAdmin()], UserController.changePassword);
