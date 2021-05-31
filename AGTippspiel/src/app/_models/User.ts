@@ -35,6 +35,9 @@
 /* do not edit */   public expertText: string;
 /* do not edit */
 /* do not edit */   
+/* do not edit */   public expertPosition: string;
+/* do not edit */
+/* do not edit */   
 /* do not edit */   public password: string;
 /* do not edit */
 /* do not edit */   

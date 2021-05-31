@@ -1,4 +1,6 @@
 import { Component, OnInit } from "@angular/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { User } from "../../_models/User";
 import { Match, Team } from "../../_models/Match";
 import { AuthenticationService } from "../../_services/authentication.service";
 import { RemoteService } from "../../_services/remote.service";
@@ -10,10 +12,12 @@ import { RemoteService } from "../../_services/remote.service";
 })
 export class MatchComponent implements OnInit {
     public matches: Match[] = [];
+    public currentMatch: Match;
     public teams: Record<number, Team> = {};
+    public experts: User[] = [];
 
     constructor(public authenticationService: AuthenticationService,
-        private remoteService: RemoteService) { }
+        private remoteService: RemoteService, private modalService: NgbModal) { }
 
     public ngOnInit(): void {
         this.remoteService.get("matches").subscribe((d: Match[]) => {
@@ -30,5 +34,17 @@ export class MatchComponent implements OnInit {
                 this.teams[team.id] = team;
             }
         });
+        this.remoteService.get("users/experts").subscribe((d: User[]) => {
+            this.experts = d;
+        });
+    }
+
+    public getExpertPictureUrl(expert: User): string {
+        return `/api/users/${expert.id}/expert/picture?authorization=${sessionStorage.getItem("jwt_token")}`;
+    }
+
+    public openMatchModal(match: Match, modal: any): void {
+        this.currentMatch = match;
+        this.modalService.open(modal, { size: "xl", scrollable: true });
     }
 }

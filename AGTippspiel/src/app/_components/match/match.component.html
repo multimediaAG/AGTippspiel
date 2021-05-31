@@ -1,6 +1,9 @@
 <div class="container">
     <div class="row">
         <div class="col-11 col-md-8 mx-auto card p-3 mt-5 text-center">
+            <div class="alert alert-primary">
+                Du hast Spiele ohne Tipps!
+            </div>
             <div class="matches" *ngIf="matches.length > 0 && (teams | keyvalue).length > 0">
                 <table class="table">
                     <tbody>
@@ -10,6 +13,8 @@
                                     <td><h3>{{match.homeTeam.name}}</h3></td>
                                     <td>
                                         <span class="d-block text-decoration-underline">Spiel {{match.number}}</span>
+                                        <span class="d-block"><b>{{match.utcDate | date: 'shortDate'}}, {{match.utcDate | date: 'shortTime'}} Uhr</b></span>
+                                        <span class="d-block">{{match.location}}</span>
                                     </td>
                                     <td><h3>{{match.awayTeam.name}}</h3></td>
                                 </tr>
@@ -23,11 +28,10 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="d-block">{{match.utcDate | date: 'shortDate'}}</span>
-                                        <span class="d-block">{{match.utcDate | date: 'shortTime'}} Uhr</span>
-                                        <u class="d-block mt-3 text-primary">Dein Tipp:</u>
+                                        <!--<u class="d-block mt-3 text-primary">Dein Tipp:</u>-->
                                         <b class="d-block text-warning">Noch kein Tipp abgegeben!</b>
-                                        <b class="d-block text-primary">7:3</b>
+                                        <!--<b class="d-block text-primary">7:3</b>-->
+                                        <button class="btn btn-outline-success" (click)="openMatchModal(match, matchModal)">Tipp abgeben</button>
                                     </td>
                                     <td>
                                         <div class="d-flex justify-content-center">
@@ -49,3 +53,48 @@
         </div>
     </div>
 </div>
+
+<ng-template #matchModal let-modal>
+    <div class="modal-header d-flex justify-content-between">
+        <h4 class="modal-title">Spiel {{currentMatch.number}}: </h4>
+        <h4 class="modal-title flex-fill text-center">
+            <img [src]="teams[currentMatch.homeTeam.id].crestUrl" class="crest">
+            <span class="mx-2">{{currentMatch.homeTeam.name}} vs. {{currentMatch.awayTeam.name}}</span>
+            <img [src]="teams[currentMatch.awayTeam.id].crestUrl" class="crest">
+        </h4>
+        <button type="button" class="btn close" (click)="modal.dismiss('Cross click')">
+            <span>&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="card p-3 overflow-y-auto">
+        <h3>Das AG-Expertenteam:</h3>
+        <div class="">
+            <table class="table text-center vertical-align-middle">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th><img [src]="teams[currentMatch.homeTeam.id].crestUrl" class="crest m-2"></th>
+                        <th><img [src]="teams[currentMatch.awayTeam.id].crestUrl" class="crest m-2"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let expert of experts">
+                            <td><img class="expert-picture" [src]="getExpertPictureUrl(expert)"></td>
+                            <td>{{expert.realName}}</td>
+                            <td><span class="text-muted">aka</span><br><i>{{expert.username}}</i></td>
+                            <td>{{expert.expertPosition}}</td>
+                            <td>{{expert.expertText}}</td>
+                            <td><span class="score">{{2}}</span></td>
+                            <td><span class="score">{{2}}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+  </ng-template>

@@ -13,6 +13,7 @@
 /* do not edit */     utcDate: string;
 /* do not edit */     status: MatchStatus;
 /* do not edit */     stage: Stage;
+/* do not edit */     location: string;
 /* do not edit */     group: string;
 /* do not edit */     lastUpdated: string;
 /* do not edit */     finalScore: {
@@ -20,6 +21,14 @@
 /* do not edit */         awayTeam: number | null;
 /* do not edit */     };
 /* do not edit */     odds: {};
+/* do not edit */     homeTeam: {
+/* do not edit */         id: string;
+/* do not edit */         name: string;
+/* do not edit */     };
+/* do not edit */     awayTeam: {
+/* do not edit */         id: string;
+/* do not edit */         name: string;
+/* do not edit */     };
 /* do not edit */     score: {
 /* do not edit */         winner: Winner;
 /* do not edit */         duration: any;
