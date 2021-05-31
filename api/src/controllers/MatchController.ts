@@ -52,6 +52,33 @@ const LOCATIONS = {
     325079: "London",
     325078: "London",
     325077: "London",
+};
+
+const COUNTRIES = {
+    "Turkey": "Türkei",
+    "Italy": "Italien",
+    "Wales": "Wales",
+    "Switzerland": "Schweiz",
+    "Denmark": "Dänemark",
+    "Finland": "Finnland",
+    "Belgium": "Belgien",
+    "Russia": "Russland",
+    "England": "England",
+    "Croatia": "Kroatien",
+    "Austria": "Österreich",
+    "North Macedinoa": "Nordmazedonien",
+    "Netherlands": "Niederlande",
+    "Ukraine": "Ukraine",
+    "Scotland": "Schottland",
+    "Czech Republic": "Tschechien",
+    "Poland": "Polen",
+    "Slovakia": "Slowakei",
+    "Spain": "Spanien",
+    "Sweden": "Schweden",
+    "Hungary": "Ungarn",
+    "Portugal": "Portugal",
+    "France": "Frankreich",
+    "Germany": "Deutschland",
 }
 
 import fetch from "node-fetch";
@@ -90,6 +117,8 @@ export class MatchController {
                 awayTeam: m.score.penalties.awayTeam ?? m.score.extraTime.awayTeam ?? m.score.fullTime.awayTeam,
             };
             m.location = LOCATIONS[m.id] || "";
+            m.homeTeam.name = COUNTRIES[m.homeTeam.name];
+            m.awayTeam.name = COUNTRIES[m.awayTeam.name];
             return m;
         }) || this.matches || [];
     }
