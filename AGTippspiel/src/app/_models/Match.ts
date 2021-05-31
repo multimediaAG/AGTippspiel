@@ -6,6 +6,7 @@
 /*    |    Then, run "npx redundancyjs" in the terminal.                      |    */
 /*    +-----------------------------------------------------------------------+    */
 
+/* do not edit */ /* tslint:disable:max-classes-per-file */
 /* do not edit */ export class Match {
 /* do not edit */     id: number;
 /* do not edit */     number: number;
@@ -16,6 +17,10 @@
 /* do not edit */     location: string;
 /* do not edit */     group: string;
 /* do not edit */     lastUpdated: string;
+/* do not edit */     myTip: {
+/* do not edit */         homeTeam: number | null;
+/* do not edit */         awayTeam: number | null;
+/* do not edit */     };
 /* do not edit */     finalScore: {
 /* do not edit */         homeTeam: number | null;
 /* do not edit */         awayTeam: number | null;

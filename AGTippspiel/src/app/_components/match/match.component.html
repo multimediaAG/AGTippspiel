@@ -1,8 +1,9 @@
 <div class="container">
     <div class="row">
         <div class="col-11 col-md-8 mx-auto card p-3 mt-5 text-center">
-            <div class="alert alert-primary">
-                Du hast Spiele ohne Tipps!
+            <div class="alert alert-primary" *ngIf="untippedMatchCount > 0">
+                Du hast für {{untippedMatchCount}} Spiel{{untippedMatchCount > 1 ? "e" : ""}} noch keinen Tipp abgegeben!<br>
+                Du kannst deinen Tipp auch noch nachträglich ändern.
             </div>
             <div class="matches" *ngIf="matches.length > 0 && (teams | keyvalue).length > 0">
                 <table class="table">
@@ -28,10 +29,15 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <!--<u class="d-block mt-3 text-primary">Dein Tipp:</u>-->
-                                        <b class="d-block text-warning">Noch kein Tipp abgegeben!</b>
-                                        <!--<b class="d-block text-primary">7:3</b>-->
-                                        <button class="btn btn-outline-success" (click)="openMatchModal(match, matchModal)">Tipp abgeben</button>
+                                        <ng-container *ngIf="match.myTip.homeTeam === null || match.myTip.awayTeam === null; else showTip">
+                                            <b class="fs-5 d-block text-warning">Noch kein Tipp abgegeben!</b>
+                                            <button class="btn btn-outline-warning mt-3" (click)="openMatchModal(match, matchModal)">Tipp abgeben</button>
+                                        </ng-container>
+                                        <ng-template #showTip>
+                                            <u class="fs-5 d-block mt-3 text-primary">Dein Tipp:</u>
+                                            <b class="fs-5 d-block text-primary">{{match.myTip.homeTeam}}:{{match.myTip.awayTeam}}</b>
+                                            <button class="btn btn-outline-primary mt-3" (click)="openMatchModal(match, matchModal)">Tipp ändern</button>
+                                        </ng-template>
                                     </td>
                                     <td>
                                         <div class="d-flex justify-content-center">
@@ -56,7 +62,6 @@
 
 <ng-template #matchModal let-modal>
     <div class="modal-header d-flex justify-content-between">
-        <h4 class="modal-title">Spiel {{currentMatch.number}}: </h4>
         <h4 class="modal-title flex-fill text-center">
             <img [src]="teams[currentMatch.homeTeam.id].crestUrl" class="crest">
             <span class="mx-2">{{currentMatch.homeTeam.name}} vs. {{currentMatch.awayTeam.name}}</span>
@@ -67,19 +72,107 @@
         </button>
     </div>
     <div class="modal-body">
-        <div class="card p-3 overflow-y-auto">
-        <h3>Das AG-Expertenteam:</h3>
-        <div class="">
+        <div class="card p-3 overflow-y-auto mb-4">
+            <h4>Das Spiel:</h4>
             <table class="table text-center vertical-align-middle">
                 <thead>
                     <tr>
                         <th></th>
+                        <th>{{currentMatch.homeTeam.name}}</th>
                         <th></th>
+                        <th>{{currentMatch.awayTeam.name}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td><img [src]="teams[currentMatch.homeTeam.id].crestUrl" class="crest"></td>
+                        <td>
+                            <span class="d-block text-decoration-underline">Spiel {{currentMatch.number}}</span>
+                            <span class="d-block"><b>{{currentMatch.utcDate | date: 'shortDate'}}</b></span>
+                            <span class="d-block"><b>{{currentMatch.utcDate | date: 'shortTime'}} Uhr</b></span>
+                            <span class="d-block">{{currentMatch.location}}</span>
+                        </td>
+                        <td><img [src]="teams[currentMatch.awayTeam.id].crestUrl" class="crest"></td>
+                    </tr>
+                    <tr>
+                        <td class="border-0">Dein Tipp:</td>
+                        <td class="border-0"><input type="number" min="0" max="25" [(ngModel)]="currentMatch.myTip.homeTeam" class="score m-auto form-control short" [placeholder]="teams[currentMatch.homeTeam.id].tla"></td>
+                        <td class="border-0">:</td>
+                        <td class="border-0"><input type="number" min="0" max="25" [(ngModel)]="currentMatch.myTip.awayTeam" class="score m-auto form-control short" [placeholder]="teams[currentMatch.awayTeam.id].tla"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-outline-success" (click)="saveTip()"><i class="fas fa-check"></i> Speichern</button>
+            </div>
+        </div>
+        <div class="card p-3 overflow-y-auto mb-4">
+            <h4>AG-Experten-Tipp:</h4>
+            <table class="table text-center vertical-align-middle">
+                <thead>
+                    <tr>
+                        <th><img [src]="teams[currentMatch.homeTeam.id].crestUrl" class="crest"></th>
                         <th></th>
-                        <th></th>
-                        <th></th>
-                        <th><img [src]="teams[currentMatch.homeTeam.id].crestUrl" class="crest m-2"></th>
-                        <th><img [src]="teams[currentMatch.awayTeam.id].crestUrl" class="crest m-2"></th>
+                        <th><img [src]="teams[currentMatch.awayTeam.id].crestUrl" class="crest"></th>
+                    </tr>
+                    <tr class="alert-warning">
+                        <th>Sieg</th>
+                        <th>Unentschieden</th>
+                        <th>Sieg</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="alert-warning">
+                        <td><span class="score">1</span></td>
+                        <td><span class="score">2</span></td>
+                        <td><span class="score">3</span></td>
+                    </tr>
+                    <tr>
+                        <td class="pt-3 border-0" colspan="3">Zusätzlich zu den regulären Punkten (siehe Spielregeln) kannst du noch bis zu <b>10 zusätzliche Punkte</b> erhalten, wenn du "gegen" unsere AG-Experten tippst.</td>
+                    </tr>
+                    <tr>        
+                        <td class="pt-2" colspan="3">
+                            Falls Du auf
+                        </td>
+                    </tr>
+                    <tr class="alert-primary">
+                        <th>Sieg</th>
+                        <th>Unentschieden</th>
+                        <th>Sieg</th>
+                    </tr>
+                    <tr>        
+                        <td colspan="3">
+                            tippst und dein Tipp zutrifft, erhältst du zusätzlich
+                        </td>
+                    </tr>
+                    <tr class="alert-primary">
+                        <td>9 Punkte</td>
+                        <td>7 Punkte</td>
+                        <td>4 Punkte</td>
+                    </tr>
+                    <tr>        
+                        <td class="border-0" colspan="3">
+                            auf dein Konto.<br>
+                            (Ab dem Achtelfinale werden diese Punkte noch mit dem entsprechenden Faktor vervielfacht.)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card p-3 overflow-y-auto mb-4">
+            <h4>Das AG-Expertenteam:</h4>
+            <div class="">
+                <table class="table text-center vertical-align-middle">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th><img [src]="teams[currentMatch.homeTeam.id].crestUrl" class="crest m-2"></th>
+                            <th><img [src]="teams[currentMatch.awayTeam.id].crestUrl" class="crest m-2"></th>
                         </tr>
                     </thead>
                     <tbody>

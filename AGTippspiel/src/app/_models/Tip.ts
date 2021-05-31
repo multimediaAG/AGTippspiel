@@ -15,14 +15,11 @@
 /* do not edit */     public id: number;
 /* do not edit */
 /* do not edit */     
-/* do not edit */     public date: Date;
-/* do not edit */
-/* do not edit */     
 /* do not edit */     public scoreHomeTeam: number;
 /* do not edit */
 /* do not edit */     
 /* do not edit */     public scoreAwayTeam: number;
-/* do not edit */   
+/* do not edit */
 /* do not edit */     
 /* do not edit */     public matchId: number;
 /* do not edit */

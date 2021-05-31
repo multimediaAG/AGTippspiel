@@ -4,6 +4,7 @@ import { User } from "../../_models/User";
 import { Match, Team } from "../../_models/Match";
 import { AuthenticationService } from "../../_services/authentication.service";
 import { RemoteService } from "../../_services/remote.service";
+import { AlertService } from "../../_services/alert.service";
 
 @Component({
     selector: "app-match",
@@ -15,9 +16,11 @@ export class MatchComponent implements OnInit {
     public currentMatch: Match;
     public teams: Record<number, Team> = {};
     public experts: User[] = [];
+    public untippedMatchCount = 0;
 
     constructor(public authenticationService: AuthenticationService,
-        private remoteService: RemoteService, private modalService: NgbModal) { }
+        private remoteService: RemoteService, private modalService: NgbModal,
+        private alertService: AlertService) { }
 
     public ngOnInit(): void {
         this.remoteService.get("matches").subscribe((d: Match[]) => {
@@ -27,6 +30,8 @@ export class MatchComponent implements OnInit {
                     ? 0
                     : -1
             ));
+            this.untippedMatchCount = this.matches.filter((m) => m.myTip.awayTeam === null
+                || m.myTip.homeTeam === null).length;
         });
         this.remoteService.get("matches/teams").subscribe((d: Team[]) => {
             this.teams = {};
@@ -36,6 +41,19 @@ export class MatchComponent implements OnInit {
         });
         this.remoteService.get("users/experts").subscribe((d: User[]) => {
             this.experts = d;
+        });
+    }
+
+    public saveTip(): void {
+        this.remoteService.post(`matches/${this.currentMatch.id}/tip`, {
+            scoreHomeTeam: this.currentMatch.myTip.homeTeam,
+            scoreAwayTeam: this.currentMatch.myTip.awayTeam,
+        }).subscribe((d: {success: boolean}) => {
+            if (d.success) {
+                this.alertService.success("Dein Tipp wurde erfolgreich gespeichert!");
+                this.modalService.dismissAll();
+                this.ngOnInit();
+            }
         });
     }
 

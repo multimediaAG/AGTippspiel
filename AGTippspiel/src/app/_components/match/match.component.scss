@@ -8,9 +8,12 @@ input.short {
     max-width: 5rem;
 }
 
-span.score {
+.score {
     font-size: 2rem;
     text-align: center;
+}
+input.score {
+    font-size: 1.5rem;
 }
 
 img.expert-picture {
