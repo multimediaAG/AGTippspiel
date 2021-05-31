@@ -51,8 +51,16 @@
     </div>
     <div class="modal-body">
         <div class="mb-3">
-            <label for="text" class="form-label">Experten-Spruch</label>
-            <textarea class="form-control" id="text" rows="3" placeholder="Ein netter Spruch, der neben dem Experten angezeigt wird." [(ngModel)]="currentExpert.expertText"></textarea>
+            <div class="row">
+                <div class="col">
+                    <label for="position" class="form-label">Experten-Position:</label>
+                    <textarea class="form-control" id="position" rows="3" placeholder="Z.B. Lehrkraft für Mathematik" [(ngModel)]="currentExpert.expertPosition"></textarea>
+                </div>
+                <div class="col">
+                    <label for="text" class="form-label">Experten-Spruch:</label>
+                    <textarea class="form-control" id="text" rows="3" placeholder="Ein netter Spruch, der neben dem Experten angezeigt wird." [(ngModel)]="currentExpert.expertText"></textarea>
+                </div>
+            </div>
         </div>
         <div class="mb-3">
             <label class="form-label">Foto:</label><br>

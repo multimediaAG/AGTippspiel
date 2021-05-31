@@ -81,7 +81,7 @@ export class UsersComponent implements OnInit {
     }
 
     public saveExpert(): void {
-        this.remoteService.post(`users/${this.currentExpert.id}/expert/text`, { text: this.currentExpert.expertText }).subscribe((data) => {
+        this.remoteService.post(`users/${this.currentExpert.id}/expert/info`, { text: this.currentExpert.expertText, position: this.currentExpert.expertPosition }).subscribe((data) => {
             if (data && data.status) {
                 this.alertService.success("Änderungen erfolgreich gespeichert!");
                 this.ngOnInit();
