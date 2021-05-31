@@ -9,6 +9,10 @@ export class Match {
     location: string;
     group: string;
     lastUpdated: string;
+    myTip: {
+        homeTeam: number | null;
+        awayTeam: number | null;
+    };
     finalScore: {
         homeTeam: number | null;
         awayTeam: number | null;

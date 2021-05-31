@@ -13,9 +13,6 @@ import { User } from "./User";
     public id: number;
 
     @Column()
-    public date: Date;
-
-    @Column()
     public scoreHomeTeam: number;
 
     @Column()

@@ -3,7 +3,6 @@ import * as jwt from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import { User } from "../entity/User";
 import { log } from "../utils/utils";
-import { Tip } from "../entity/Tip";
 
 class AuthController {
 

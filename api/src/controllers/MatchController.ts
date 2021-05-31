@@ -82,8 +82,13 @@ const COUNTRIES = {
 }
 
 import fetch from "node-fetch";
-import { Request, Response } from "express";
+import { Request, Response, text } from "express";
 import { Match, Team } from "../entity/Match";
+import { getRepository } from "typeorm";
+import { User } from "../entity/User";
+import { isNumber } from "class-validator";
+import { Tip } from "../entity/Tip";
+import { log } from "../utils/utils";
 
 export class MatchController {
     static matches: Match[];
@@ -97,7 +102,16 @@ export class MatchController {
     }
 
     public static getMatches = async (req: Request, res: Response) => {
-        res.send(MatchController.matches);
+        const user = await getRepository(User).findOne(res.locals.jwtPayload.userId);
+        const tips = await getRepository(Tip).find({where: { user }});
+        res.send(MatchController.matches.map((match) => {
+            const tip = tips.find((t) => t.matchId == match.id);
+            if (tip) {
+                match.myTip.homeTeam = tip.scoreHomeTeam;
+                match.myTip.awayTeam = tip.scoreAwayTeam;
+            }
+            return match;
+        }));
     }
 
     public static getTeams = async (req: Request, res: Response) => {
@@ -119,6 +133,10 @@ export class MatchController {
             m.location = LOCATIONS[m.id] || "";
             m.homeTeam.name = COUNTRIES[m.homeTeam.name];
             m.awayTeam.name = COUNTRIES[m.awayTeam.name];
+            m.myTip = {
+                awayTeam: null,
+                homeTeam: null,
+            };
             return m;
         }) || this.matches || [];
     }
@@ -132,5 +150,39 @@ export class MatchController {
             },
         });
         this.teams = (await request.json())?.teams || this.teams || [];
+    }
+
+    public static updateTip = async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const matchId = Number(id);
+        const { scoreHomeTeam, scoreAwayTeam } = req.body;
+
+        const userRepository = getRepository(User);
+        const tipRepository = getRepository(Tip);
+        try {
+            if (!MatchController.matches.find((m) => m.id === matchId)) {
+                res.status(500).send({ message: "Dieses Spiel existiert nicht!" });
+                return;
+            }
+            if (!isNumber(scoreHomeTeam) || !isNumber(scoreAwayTeam)) {
+                res.status(500).send({ message: "Nicht alle Felder ausgefüllt!" });
+                return;
+            }
+            const user = await userRepository.findOne(res.locals.jwtPayload.userId);
+            let tip = await tipRepository.findOne({ where: { user, matchId } });
+            if (!tip) {
+                tip = new Tip();
+                tip.user = user;
+                tip.matchId = matchId;
+            }
+            tip.scoreHomeTeam = scoreHomeTeam;
+            tip.scoreAwayTeam = scoreAwayTeam;
+            await tipRepository.save(tip);
+        } catch (e) {
+            res.status(500).send({ message: "Konnte die Info nicht ändern!" });
+            return;
+        }
+        log("usertip changed", { user: res.locals.jwtPayload.userId, matchId, scoreHomeTeam, scoreAwayTeam });
+        res.status(200).send({ success: true });
     }
 }
