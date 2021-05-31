@@ -8,6 +8,7 @@ import { registerLocaleData } from "@angular/common";
 import localeDe from "@angular/common/locales/de";
 import { CountdownModule } from "ngx-countdown";
 import { AngularFileUploaderModule } from "angular-file-uploader";
+import { ServiceWorkerModule } from "@angular/service-worker";
 import { SafePipe } from "./_pipes/safe.pipe";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -23,6 +24,7 @@ import { JwtInterceptor } from "./_interceptors/jwt.interceptor";
 import { UsersComponent } from "./_components/users/users.component";
 import { MatchComponent } from "./_components/match/match.component";
 import { MatchCountdownComponent } from "./_components/match-countdown/match-countdown.component";
+import { environment } from "../environments/environment";
 
 registerLocaleData(localeDe);
 
@@ -51,6 +53,12 @@ registerLocaleData(localeDe);
         CountdownModule,
         ToastrModule.forRoot(),
         AngularFileUploaderModule,
+        ServiceWorkerModule.register("ngsw-worker.js", {
+            enabled: environment.production,
+            // Register the ServiceWorker as soon as the app is stable
+            // or after 30 seconds (whichever comes first).
+            registrationStrategy: "registerWhenStable:30000",
+        }),
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
