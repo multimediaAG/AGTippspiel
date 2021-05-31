@@ -21,6 +21,24 @@
 /* do not edit */         homeTeam: number | null;
 /* do not edit */         awayTeam: number | null;
 /* do not edit */     };
+/* do not edit */     expertTips: {
+/* do not edit */         [id: number]: {
+/* do not edit */             homeTeam: number | null;
+/* do not edit */             awayTeam: number | null;
+/* do not edit */         };
+/* do not edit */     };
+/* do not edit */     expertOdds: {
+/* do not edit */         count: {
+/* do not edit */             homeTeam: number;
+/* do not edit */             draw: number;
+/* do not edit */             awayTeam: number;
+/* do not edit */         };
+/* do not edit */         points: {
+/* do not edit */             homeTeam: number;
+/* do not edit */             draw: number;
+/* do not edit */             awayTeam: number;
+/* do not edit */         };
+/* do not edit */     };
 /* do not edit */     finalScore: {
 /* do not edit */         homeTeam: number | null;
 /* do not edit */         awayTeam: number | null;

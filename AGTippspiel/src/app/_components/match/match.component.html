@@ -124,9 +124,9 @@
                 </thead>
                 <tbody>
                     <tr class="alert-warning">
-                        <td><span class="score">1</span></td>
-                        <td><span class="score">2</span></td>
-                        <td><span class="score">3</span></td>
+                        <td><span class="score">{{currentMatch.expertOdds.count.homeTeam}}</span></td>
+                        <td><span class="score">{{currentMatch.expertOdds.count.draw}}</span></td>
+                        <td><span class="score">{{currentMatch.expertOdds.count.awayTeam}}</span></td>
                     </tr>
                     <tr>
                         <td class="pt-3 border-0" colspan="3">Zusätzlich zu den regulären Punkten (siehe Spielregeln) kannst du noch bis zu <b>10 zusätzliche Punkte</b> erhalten, wenn du "gegen" unsere AG-Experten tippst.</td>
@@ -147,9 +147,9 @@
                         </td>
                     </tr>
                     <tr class="alert-primary">
-                        <td>9 Punkte</td>
-                        <td>7 Punkte</td>
-                        <td>4 Punkte</td>
+                        <td>{{currentMatch.expertOdds.points.homeTeam}} Punkte</td>
+                        <td>{{currentMatch.expertOdds.points.draw}} Punkte</td>
+                        <td>{{currentMatch.expertOdds.points.awayTeam}} Punkte</td>
                     </tr>
                     <tr>        
                         <td class="border-0" colspan="3">
@@ -182,8 +182,8 @@
                             <td><span class="text-muted">aka</span><br><i>{{expert.username}}</i></td>
                             <td>{{expert.expertPosition}}</td>
                             <td>{{expert.expertText}}</td>
-                            <td><span class="score">{{2}}</span></td>
-                            <td><span class="score">{{2}}</span></td>
+                            <td><span class="score">{{currentMatch.expertTips[expert.id]?.homeTeam}}</span></td>
+                            <td><span class="score">{{currentMatch.expertTips[expert.id]?.awayTeam}}</span></td>
                         </tr>
                     </tbody>
                 </table>
