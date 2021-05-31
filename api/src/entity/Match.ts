@@ -13,6 +13,24 @@ export class Match {
         homeTeam: number | null;
         awayTeam: number | null;
     };
+    expertTips: {
+        [id: number]: {
+            homeTeam: number | null;
+            awayTeam: number | null;
+        };
+    };
+    expertOdds: {
+        count: {
+            homeTeam: number;
+            draw: number;
+            awayTeam: number;
+        };
+        points: {
+            homeTeam: number;
+            draw: number;
+            awayTeam: number;
+        };
+    };
     finalScore: {
         homeTeam: number | null;
         awayTeam: number | null;

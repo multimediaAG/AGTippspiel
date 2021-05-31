@@ -88,7 +88,8 @@ import { getRepository } from "typeorm";
 import { User } from "../entity/User";
 import { isNumber } from "class-validator";
 import { Tip } from "../entity/Tip";
-import { log } from "../utils/utils";
+import { copy, log } from "../utils/utils";
+import { Z_TEXT } from "zlib";
 
 export class MatchController {
     static matches: Match[];
@@ -102,26 +103,65 @@ export class MatchController {
     }
 
     public static getMatches = async (req: Request, res: Response) => {
-        const user = await getRepository(User).findOne(res.locals.jwtPayload.userId);
-        const tips = await getRepository(Tip).find({where: { user }});
-        res.send(MatchController.matches.map((match) => {
-            const tip = tips.find((t) => t.matchId == match.id);
-            if (tip) {
-                match.myTip.homeTeam = tip.scoreHomeTeam;
-                match.myTip.awayTeam = tip.scoreAwayTeam;
-            }
-            return match;
-        }));
-    }
+        try {
 
-    public static getTeams = async (req: Request, res: Response) => {
-        res.send(MatchController.teams);
-    }
-
-    private static async loadMatches() {
-        const request = await fetch(`https://api.football-data.org/v2/competitions/${EUROPEAN_CHAMPIONSHIP_ID}/matches?season=${CURRENT_SEASON_YEAR}`, {
-            headers: {
-                "X-Auth-Token": "79fe8894898e4ca6aee7c1fd9142f91c",
+            const user = await getRepository(User).findOne(res.locals.jwtPayload.userId);
+            const tipRepository = getRepository(Tip);
+            const myTips = await tipRepository.find({where: { user }});
+            const allExpertTips = await tipRepository.createQueryBuilder('tip')
+            .innerJoinAndSelect('tip.user', 'user')
+            .where('user.isExpert = true').getMany();
+            console.log(allExpertTips)
+            res.send(MatchController.matches.map((m) => {
+                const match = copy(m) as Match;
+                const expertTipps = allExpertTips.filter((t) => t.matchId == match.id);
+                const tip = myTips.find((t) => t.matchId == match.id);
+                if (tip) {
+                    match.myTip.homeTeam = tip.scoreHomeTeam;
+                    match.myTip.awayTeam = tip.scoreAwayTeam;
+                }
+                
+                const expertCountHomeTeam = expertTipps.filter((t) => t.scoreAwayTeam < t.scoreHomeTeam).length;
+                const expertCountAwayTeam = expertTipps.filter((t) => t.scoreAwayTeam > t.scoreHomeTeam).length;
+                const expertCountDraw = expertTipps.filter((t) => t.scoreAwayTeam == t.scoreHomeTeam).length;
+                const expertCountTotal = expertCountHomeTeam + expertCountDraw + expertCountAwayTeam;
+                
+                match.expertOdds = {
+                    points: {
+                        homeTeam: 10 * (expertCountDraw + expertCountAwayTeam) / expertCountTotal,
+                        draw: 10 * (expertCountHomeTeam + expertCountAwayTeam) / expertCountTotal,
+                        awayTeam: 10 * (expertCountHomeTeam + expertCountDraw) / expertCountTotal,
+                    },
+                    count: {
+                        homeTeam: expertCountHomeTeam,
+                        draw: expertCountDraw,
+                        awayTeam: expertCountAwayTeam,
+                    }
+                };
+                match.expertTips = Object.fromEntries(expertTipps.map((expertTip) => {
+                    return [
+                        expertTip.user.id,
+                        {
+                            homeTeam: expertTip.scoreHomeTeam,
+                            awayTeam: expertTip.scoreAwayTeam
+                        },
+                    ];
+                }));
+                return match;
+            }));
+        } catch (e) {
+            console.trace(e);
+        }
+        }
+        
+        public static getTeams = async (req: Request, res: Response) => {
+            res.send(MatchController.teams);
+        }
+        
+        private static async loadMatches() {
+            const request = await fetch(`https://api.football-data.org/v2/competitions/${EUROPEAN_CHAMPIONSHIP_ID}/matches?season=${CURRENT_SEASON_YEAR}`, {
+                headers: {
+                    "X-Auth-Token": "79fe8894898e4ca6aee7c1fd9142f91c",
             },
         });
         this.matches = (await request.json())?.matches.map((m: Match, i) => {
