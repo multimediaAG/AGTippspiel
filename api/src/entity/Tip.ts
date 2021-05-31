@@ -20,7 +20,7 @@ import { User } from "./User";
 
     @Column()
     public scoreAwayTeam: number;
-  
+
     @Column()
     public matchId: number;
 

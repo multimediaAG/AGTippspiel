@@ -20,11 +20,11 @@ class UserController {
     const experts = await userRepository.find({ relations: ["tips"], where: { isExpert: true } });
     res.send(experts);
   }
-  
+
   public static serveExpertPicture = async (req: Request, res: Response) => {
     const id = req.params.id.replace(/\//g, "").replace(/\./g, "").replace(/\\/g, "");
     const s = path.resolve(path.join(req.app.locals.config.UPLOAD_FILE_PATH, `${id}.jpg`));
-    if (fs.existsSync(s)) { 
+    if (fs.existsSync(s)) {
       res.sendFile(s);
     } else {
       res.status(404).send("No picture!");
@@ -33,7 +33,7 @@ class UserController {
 
   public static listAllAdmin = async (req: Request, res: Response) => {
     const userRepository = getRepository(User);
-    let users = await userRepository.find({ relations: ["tips"] });
+    const users = await userRepository.find({ relations: ["tips"] });
     res.send(users);
   }
 

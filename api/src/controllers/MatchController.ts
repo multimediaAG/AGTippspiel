@@ -123,7 +123,7 @@ export class MatchController {
         }) || this.matches || [];
     }
 
-    
+
 
     private static async loadTeams() {
         const request = await fetch(`https://api.football-data.org/v2/competitions//${EUROPEAN_CHAMPIONSHIP_ID}/teams?season=${CURRENT_SEASON_YEAR}`, {
