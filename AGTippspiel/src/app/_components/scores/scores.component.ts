@@ -77,9 +77,13 @@ export class ScoresComponent {
             }
             this.users = [];
             for (const [grade, d] of Object.entries(grades) as any) {
+                let points = this.currentView.id == "grades-absolute" ? d.points : Math.round(d.points / d.users);
+                if (Number.isNaN(points)) {
+                    points = 0;
+                }
                 this.users.push({
                     grade,
-                    points: this.currentView.id == "grades-absolute" ? d.points : Math.round(d.points / d.users),
+                    points,
                 } as any);
             }
             this.users.sort((a, b) => b.points - a.points);
@@ -90,7 +94,7 @@ export class ScoresComponent {
             if (lastUser && lastUser.points && user.points < lastUser.points) {
                 place++;
             }
-            user.points = place;
+            user.place = place;
             lastUser = user;
         }
         if (this.authenticationService.loggedIn) {
@@ -108,7 +112,7 @@ export class ScoresComponent {
                     this.myPlace = undefined;
                 }
             }
-            this.placesCount = this.users[this.users.length - 1].place;
+            this.placesCount = this.users[this.users.length - 1]?.place || 0;
         }
     }
 
