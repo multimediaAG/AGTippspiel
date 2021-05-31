@@ -41,6 +41,7 @@ jobs:
       run: npm run build
   build_docker:
     name: Docker Build
+    needs: [build_web, build_api]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
