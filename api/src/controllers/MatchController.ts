@@ -117,12 +117,12 @@ export class MatchController {
                 match.myTip.homeTeam = tip.scoreHomeTeam;
                 match.myTip.awayTeam = tip.scoreAwayTeam;
             }
-            
+
             const expertCountHomeTeam = expertTipps.filter((t) => t.scoreAwayTeam < t.scoreHomeTeam).length;
             const expertCountAwayTeam = expertTipps.filter((t) => t.scoreAwayTeam > t.scoreHomeTeam).length;
             const expertCountDraw = expertTipps.filter((t) => t.scoreAwayTeam == t.scoreHomeTeam).length;
             const expertCountTotal = expertCountHomeTeam + expertCountDraw + expertCountAwayTeam;
-            
+
             match.expertOdds = {
                 points: {
                     homeTeam: 10 * (expertCountDraw + expertCountAwayTeam) / expertCountTotal,
@@ -147,11 +147,11 @@ export class MatchController {
             return match;
         }));
     }
-    
+
     public static getTeams = async (req: Request, res: Response) => {
         res.send(MatchController.teams);
     }
-    
+
     private static async loadMatches() {
         const request = await fetch(`https://api.football-data.org/v2/competitions/${EUROPEAN_CHAMPIONSHIP_ID}/matches?season=${CURRENT_SEASON_YEAR}`, {
             headers: {

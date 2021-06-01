@@ -10,19 +10,16 @@ export function log(action: string, data: any) {
 }
 
 export function copy(obj: any) {
-   if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
+    if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
        return obj;
 
-   if (obj instanceof Date)
-       var temp = new (obj as any).constructor(); //or new Date(obj);
-   else
-       var temp = obj.constructor();
+    const temp = obj instanceof Date ? new (obj as any).constructor() : obj.constructor();
 
-   for (var key in obj) {
+    for (const key in obj) {
        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-           obj['isActiveClone'] = null;
+           obj.isActiveClone = null;
            temp[key] = copy(obj[key]);
-           delete obj['isActiveClone'];
+           delete obj.isActiveClone;
        }
    }
    return temp;
