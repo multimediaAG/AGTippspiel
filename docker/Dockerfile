@@ -7,7 +7,6 @@ RUN apt-get update && apt-get -y install build-essential libcairo2-dev libpango1
 RUN mkdir -p /app/config && mkdir /app/dist && mkdir /app/data && mkdir /assets
 COPY backend /app/dist
 COPY frontend /app/dist/frontend
-COPY worldmap.png /assets/worldmap.png
 COPY container-env.json /container-env.json
 
 EXPOSE 80
