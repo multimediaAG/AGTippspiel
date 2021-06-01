@@ -17,6 +17,7 @@
 /* do not edit */     location: string;
 /* do not edit */     group: string;
 /* do not edit */     lastUpdated: string;
+/* do not edit */     myPoints: number | null;
 /* do not edit */     myTip: {
 /* do not edit */         homeTeam: number | null;
 /* do not edit */         awayTeam: number | null;

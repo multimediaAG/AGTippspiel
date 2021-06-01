@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-11 col-md-8 mx-auto card p-3 mt-5 text-center">
             <div class="alert alert-primary" *ngIf="untippedMatchCount > 0">
-                Du hast für {{untippedMatchCount}} Spiel{{untippedMatchCount > 1 ? "e" : ""}} noch keinen Tipp abgegeben!<br>
+                Du hast für {{untippedMatchCount}} {{untippedMatchCount > 1 ? "ausstehende Spiele" : "ausstehendes Spiel"}} noch keinen Tipp abgegeben!<br>
                 Du kannst deinen Tipp auch noch nachträglich ändern.
             </div>
             <div class="matches" *ngIf="matches.length > 0 && (teams | keyvalue).length > 0">
@@ -37,6 +37,10 @@
                                             <u class="fs-5 d-block mt-3 text-primary">Dein Tipp:</u>
                                             <b class="fs-5 d-block text-primary">{{match.myTip.homeTeam}}:{{match.myTip.awayTeam}}</b>
                                             <button class="btn btn-outline-primary mt-3" *ngIf="match.status == 'SCHEDULED'" (click)="openMatchModal(match, matchModal)">Tipp ändern</button>
+                                            <ng-container *ngIf="match.status == 'FINISHED'" >
+                                                <u class="fs-5 d-block mt-3 text-primary">Deine Punkte:</u>
+                                                <b class="fs-5 d-block text-primary">{{match.myPoints}}</b>
+                                            </ng-container>
                                         </ng-template>
                                     </td>
                                     <td>
@@ -74,7 +78,7 @@
         </button>
     </div>
     <div class="modal-body">
-        <div class="card p-3 overflow-y-auto mb-4">
+        <div class="card p-3 overflow-y-auto mb-4 bg-light">
             <h4>Das Spiel:</h4>
             <table class="table text-center vertical-align-middle">
                 <thead>
