@@ -126,9 +126,9 @@ export class MatchController {
 
             match.expertOdds = {
                 points: {
-                    homeTeam: 10 * (expertCountDraw + expertCountAwayTeam) / expertCountTotal,
-                    draw: 10 * (expertCountHomeTeam + expertCountAwayTeam) / expertCountTotal,
-                    awayTeam: 10 * (expertCountHomeTeam + expertCountDraw) / expertCountTotal,
+                    homeTeam: 10 * (expertCountDraw + expertCountAwayTeam) / expertCountTotal || 0,
+                    draw: 10 * (expertCountHomeTeam + expertCountAwayTeam) / expertCountTotal || 0,
+                    awayTeam: 10 * (expertCountHomeTeam + expertCountDraw) / expertCountTotal || 0,
                 },
                 count: {
                     homeTeam: expertCountHomeTeam,
