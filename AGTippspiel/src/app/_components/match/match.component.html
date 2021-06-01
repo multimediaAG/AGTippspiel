@@ -99,9 +99,9 @@
                     </tr>
                     <tr>
                         <td class="border-0">Dein Tipp:</td>
-                        <td class="border-0"><input type="number" min="0" max="25" [(ngModel)]="currentMatch.myTip.homeTeam" class="score m-auto form-control short" [placeholder]="teams[currentMatch.homeTeam.id].tla"></td>
+                        <td class="border-0"><input type="number" min="0" max="25" [(ngModel)]="tipHomeTeam" class="score m-auto form-control short" [placeholder]="teams[currentMatch.homeTeam.id].tla"></td>
                         <td class="border-0">:</td>
-                        <td class="border-0"><input type="number" min="0" max="25" [(ngModel)]="currentMatch.myTip.awayTeam" class="score m-auto form-control short" [placeholder]="teams[currentMatch.awayTeam.id].tla"></td>
+                        <td class="border-0"><input type="number" min="0" max="25" [(ngModel)]="tipAwayTeam" class="score m-auto form-control short" [placeholder]="teams[currentMatch.awayTeam.id].tla"></td>
                     </tr>
                 </tbody>
             </table>

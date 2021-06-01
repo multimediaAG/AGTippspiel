@@ -18,6 +18,9 @@ export class MatchComponent implements OnInit {
     public experts: User[] = [];
     public untippedMatchCount = 0;
 
+    public tipHomeTeam: number;
+    public tipAwayTeam: number;
+
     constructor(public authenticationService: AuthenticationService,
         private remoteService: RemoteService, private modalService: NgbModal,
         private alertService: AlertService) { }
@@ -30,8 +33,7 @@ export class MatchComponent implements OnInit {
                     ? 0
                     : -1
             ));
-            this.untippedMatchCount = this.matches.filter((m) => m.myTip.awayTeam === null
-                || m.myTip.homeTeam === null).length;
+            this.updateUntippedCount();
         });
         this.remoteService.get("matches/teams").subscribe((d: Team[]) => {
             this.teams = {};
@@ -44,11 +46,20 @@ export class MatchComponent implements OnInit {
         });
     }
 
+    private updateUntippedCount() {
+        this.untippedMatchCount = this.matches.filter((m) => m.status == MatchStatus.SCHEDULED
+            && (m.myTip.awayTeam === null
+                || m.myTip.homeTeam === null)).length;
+    }
+
     public onCountdownFinished(match: Match): void {
         match.status = MatchStatus.IN_PLAY;
+        this.updateUntippedCount();
     }
 
     public saveTip(): void {
+        this.currentMatch.myTip.homeTeam = this.tipHomeTeam;
+        this.currentMatch.myTip.awayTeam = this.tipAwayTeam;
         this.remoteService.post(`matches/${this.currentMatch.id}/tip`, {
             scoreHomeTeam: this.currentMatch.myTip.homeTeam,
             scoreAwayTeam: this.currentMatch.myTip.awayTeam,
@@ -67,6 +78,8 @@ export class MatchComponent implements OnInit {
 
     public openMatchModal(match: Match, modal: any): void {
         this.currentMatch = match;
+        this.tipHomeTeam = match.myTip.homeTeam;
+        this.tipAwayTeam = match.myTip.awayTeam;
         this.modalService.open(modal, { size: "xl", scrollable: true });
     }
 }
