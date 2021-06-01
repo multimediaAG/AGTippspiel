@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { User } from "../../_models/User";
-import { Match, Team } from "../../_models/Match";
+import { Match, MatchStatus, Team } from "../../_models/Match";
 import { AuthenticationService } from "../../_services/authentication.service";
 import { RemoteService } from "../../_services/remote.service";
 import { AlertService } from "../../_services/alert.service";
@@ -42,6 +42,10 @@ export class MatchComponent implements OnInit {
         this.remoteService.get("users/experts").subscribe((d: User[]) => {
             this.experts = d;
         });
+    }
+
+    public onCountdownFinished(match: Match): void {
+        match.status = MatchStatus.IN_PLAY;
     }
 
     public saveTip(): void {

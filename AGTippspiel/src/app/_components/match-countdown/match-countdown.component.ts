@@ -1,5 +1,8 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { Match, MatchStatus } from "../../_models/Match";
+import {
+    Component, EventEmitter, Input, OnInit, Output,
+} from "@angular/core";
+import { CountdownEvent } from "ngx-countdown";
+import { Match } from "../../_models/Match";
 
 @Component({
     selector: "app-match-countdown",
@@ -8,6 +11,7 @@ import { Match, MatchStatus } from "../../_models/Match";
 })
 export class MatchCountdownComponent implements OnInit {
     @Input() match: Match;
+    @Output() countdownFinished = new EventEmitter<void>();
     public config;
 
     public ngOnInit(): void {
@@ -28,6 +32,7 @@ export class MatchCountdownComponent implements OnInit {
             prettyText: (text) => {
                 const parts = text.split(":");
                 parts[0] -= 1;
+                parts[1] -= 1;
                 let string = "noch ";
                 for (let i = 0; i < names.length; i++) {
                     string += `${parts[i] > 0 ? parts[i] > 1 ? `${parts[i]} ${names[i].plural}, ` : `1 ${names[i].singular}, ` : ""}`;
@@ -35,5 +40,11 @@ export class MatchCountdownComponent implements OnInit {
                 return string.slice(0, string.length - 2);
             },
         };
+    }
+
+    public handleEvent(event: CountdownEvent): void {
+        if (event.action == "done") {
+            this.countdownFinished.emit();
+        }
     }
 }

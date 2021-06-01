@@ -30,13 +30,13 @@
                                     </td>
                                     <td>
                                         <ng-container *ngIf="match.myTip.homeTeam === null || match.myTip.awayTeam === null; else showTip">
-                                            <b class="fs-5 d-block text-warning">Noch kein Tipp abgegeben!</b>
-                                            <button class="btn btn-outline-warning mt-3" (click)="openMatchModal(match, matchModal)">Tipp abgeben</button>
+                                            <b class="fs-5 d-block text-warning">{{match.status == 'SCHEDULED' ? 'Noch kein' : 'Kein'}} Tipp abgegeben!</b>
+                                            <button class="btn btn-outline-warning mt-3" *ngIf="match.status == 'SCHEDULED'" (click)="openMatchModal(match, matchModal)">Tipp abgeben</button>
                                         </ng-container>
                                         <ng-template #showTip>
                                             <u class="fs-5 d-block mt-3 text-primary">Dein Tipp:</u>
                                             <b class="fs-5 d-block text-primary">{{match.myTip.homeTeam}}:{{match.myTip.awayTeam}}</b>
-                                            <button class="btn btn-outline-primary mt-3" (click)="openMatchModal(match, matchModal)">Tipp ändern</button>
+                                            <button class="btn btn-outline-primary mt-3" *ngIf="match.status == 'SCHEDULED'" (click)="openMatchModal(match, matchModal)">Tipp ändern</button>
                                         </ng-template>
                                     </td>
                                     <td>
@@ -49,7 +49,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pb-5" colspan="3"><app-match-countdown [match]="match"></app-match-countdown></td> 
+                                    <td class="pb-5" colspan="3">
+                                        <app-match-countdown [match]="match" (countdownFinished)="onCountdownFinished(match)"></app-match-countdown>
+                                    </td> 
                                 </tr>
                                 </ng-container>
                         </ng-container>
