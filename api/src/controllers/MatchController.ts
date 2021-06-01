@@ -83,7 +83,7 @@ const COUNTRIES = {
 
 import fetch from "node-fetch";
 import { Request, Response } from "express";
-import { Match, MatchStatus, Team } from "../entity/Match";
+import { Match, MatchStatus, Stage, Team, Winner } from "../entity/Match";
 import { getRepository } from "typeorm";
 import { User } from "../entity/User";
 import { isNumber } from "class-validator";
@@ -114,10 +114,6 @@ export class MatchController {
             const match = copy(m) as Match;
             const expertTipps = allExpertTips.filter((t) => t.matchId == match.id);
             const tip = myTips.find((t) => t.matchId == match.id);
-            if (tip) {
-                match.myTip.homeTeam = tip.scoreHomeTeam;
-                match.myTip.awayTeam = tip.scoreAwayTeam;
-            }
 
             const expertCountHomeTeam = expertTipps.filter((t) => t.scoreAwayTeam < t.scoreHomeTeam).length;
             const expertCountAwayTeam = expertTipps.filter((t) => t.scoreAwayTeam > t.scoreHomeTeam).length;
@@ -126,9 +122,9 @@ export class MatchController {
 
             match.expertOdds = {
                 points: {
-                    homeTeam: 10 * (expertCountDraw + expertCountAwayTeam) / expertCountTotal || 0,
-                    draw: 10 * (expertCountHomeTeam + expertCountAwayTeam) / expertCountTotal || 0,
-                    awayTeam: 10 * (expertCountHomeTeam + expertCountDraw) / expertCountTotal || 0,
+                    homeTeam: MatchController.round(10 * (expertCountDraw + expertCountAwayTeam) / expertCountTotal) || 0,
+                    draw: MatchController.round(10 * (expertCountHomeTeam + expertCountAwayTeam) / expertCountTotal) || 0,
+                    awayTeam: MatchController.round(10 * (expertCountHomeTeam + expertCountDraw) / expertCountTotal) || 0,
                 },
                 count: {
                     homeTeam: expertCountHomeTeam,
@@ -145,12 +141,73 @@ export class MatchController {
                     },
                 ];
             }));
+            
+            if (tip) {
+                match.myTip.homeTeam = tip.scoreHomeTeam;
+                match.myTip.awayTeam = tip.scoreAwayTeam;
+                match.myPoints = MatchController.getMyPoints(match, tip);
+            } else {
+                match.myPoints = 0;
+            }
             return match;
         }));
     }
 
     public static getTeams = async (req: Request, res: Response) => {
         res.send(MatchController.teams);
+    }
+
+    
+    private static getMyPoints(match: Match, tip: Tip): number | null {
+        if (match.status !== MatchStatus.FINISHED) {
+            return null;
+        }
+        let points = 0;
+        // Base Points
+        if (match.finalScore.awayTeam === tip.scoreAwayTeam && match.finalScore.homeTeam === tip.scoreHomeTeam) {
+            points += 30;
+        } else if (match.score.winner == Winner.DRAW) {
+            if (tip.scoreAwayTeam === tip.scoreHomeTeam) {
+                points += 10;
+            }
+        } else {
+            const scoreDiff = match.finalScore.awayTeam - match.finalScore.homeTeam;
+            const tipDiff = (tip.scoreAwayTeam - tip.scoreHomeTeam);
+            if (scoreDiff === tipDiff) {
+                points += 20;
+            } else if (((scoreDiff > 0) === (tipDiff > 0)) && scoreDiff !== 0 && tipDiff !== 0) {
+                points += 10;
+            }
+        }
+        // Expert Points
+        if (points > 0) {
+            if (match.score.winner == Winner.DRAW) {
+                points += match.expertOdds.points.draw;
+            } else if (match.score.winner == Winner.HOME_TEAM) {
+                points += match.expertOdds.points.homeTeam;
+            } else if (match.score.winner == Winner.AWAY_TEAM) {
+                points += match.expertOdds.points.awayTeam;
+            }
+        }
+        // Multiply by round
+        switch (match.stage) {
+            case Stage.GROUP_STAGE:
+                points *= 1;
+                break;
+            case Stage.LAST_16:
+                points *= 1.5;
+                break;
+            case Stage.QUARTER_FINAL:
+                points *= 2.5;
+                break;
+            case Stage.SEMI_FINAL:
+                points *= 3;
+                break;
+            case Stage.FINAL:
+                points *= 4;
+                break;
+        }
+        return MatchController.round(points);
     }
 
     private static async loadMatches() {
@@ -160,6 +217,31 @@ export class MatchController {
             },
         });
         this.matches = (await request.json())?.matches.map((m: Match, i) => {
+            /* ONLY FOR TESTING */
+            if (i == 0) {
+                m.status = MatchStatus.FINISHED;
+                m.stage = Stage.LAST_16;
+                m.score = {
+                    winner: Winner.DRAW,
+                    duration: null,
+                    halfTime: {
+                        awayTeam: 0,
+                        homeTeam: 2,
+                    },
+                    extraTime: {
+                        awayTeam: null,
+                        homeTeam: null,
+                    },
+                    fullTime: {
+                        awayTeam: 2,
+                        homeTeam: 2,
+                    },
+                    penalties: {
+                        awayTeam: null,
+                        homeTeam: null,
+                    },
+                };
+            }
             m.number = i + 1;
             m.finalScore = {
                 homeTeam: m.score.penalties.homeTeam ?? m.score.extraTime.homeTeam ?? m.score.fullTime.homeTeam,
@@ -185,13 +267,17 @@ export class MatchController {
             }
             MatchController.updateMatchStatus(m);
             return m;
-        }) || this.matches || [];
+        }) || MatchController.matches || [];
     }
 
     private static updateMatchStatus(m: Match) {
         if (new Date(m.utcDate) < new Date()) {
             m.status = MatchStatus.IN_PLAY;
         }
+    }
+
+    private static round(v: number) {
+        return Math.ceil(v * 10) / 10;
     }
 
     private static async loadTeams() {
