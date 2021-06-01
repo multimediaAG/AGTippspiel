@@ -82,14 +82,15 @@ const COUNTRIES = {
 }
 
 import fetch from "node-fetch";
-import { Request, Response, text } from "express";
-import { Match, Team } from "../entity/Match";
+import { Request, Response } from "express";
+import { Match, MatchStatus, Team } from "../entity/Match";
 import { getRepository } from "typeorm";
 import { User } from "../entity/User";
 import { isNumber } from "class-validator";
 import { Tip } from "../entity/Tip";
 import { copy, log } from "../utils/utils";
-import { Z_TEXT } from "zlib";
+
+const MATCH_FETCH_TIME = 60 * 1000;
 
 export class MatchController {
     static matches: Match[];
@@ -99,7 +100,7 @@ export class MatchController {
         MatchController.loadMatches();
         setInterval(() => {
             MatchController.loadMatches();
-        }, 60 * 1000)
+        }, MATCH_FETCH_TIME)
     }
 
     public static getMatches = async (req: Request, res: Response) => {
@@ -171,11 +172,25 @@ export class MatchController {
                 awayTeam: null,
                 homeTeam: null,
             };
+            if (Math.random() < 0.2) {
+                m.utcDate = new Date(Date.now() + 60 * 1000).toISOString();
+            }
+            const remainingTime = new Date(m.utcDate).getTime() - new Date().getTime();
+            if (remainingTime < MATCH_FETCH_TIME) {
+                setTimeout(() => {
+                    MatchController.updateMatchStatus(m);
+                }, remainingTime);
+            }
+            MatchController.updateMatchStatus(m);
             return m;
         }) || this.matches || [];
     }
 
-
+    private static updateMatchStatus(m: Match) {
+        if (new Date(m.utcDate) < new Date()) {
+            m.status = MatchStatus.IN_PLAY;
+        }
+    }
 
     private static async loadTeams() {
         const request = await fetch(`https://api.football-data.org/v2/competitions//${EUROPEAN_CHAMPIONSHIP_ID}/teams?season=${CURRENT_SEASON_YEAR}`, {
