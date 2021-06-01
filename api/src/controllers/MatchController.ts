@@ -141,7 +141,7 @@ export class MatchController {
                     },
                 ];
             }));
-            
+
             if (tip) {
                 match.myTip.homeTeam = tip.scoreHomeTeam;
                 match.myTip.awayTeam = tip.scoreAwayTeam;
@@ -157,7 +157,6 @@ export class MatchController {
         res.send(MatchController.teams);
     }
 
-    
     private static getMyPoints(match: Match, tip: Tip): number | null {
         if (match.status !== MatchStatus.FINISHED) {
             return null;
