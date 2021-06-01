@@ -172,9 +172,11 @@ export class MatchController {
                 awayTeam: null,
                 homeTeam: null,
             };
+            /* ONLY FOR TESTING */
+            /*
             if (Math.random() < 0.2) {
-                m.utcDate = new Date(Date.now() + 60 * 1000).toISOString();
-            }
+                m.utcDate = new Date(Date.now() + 20 * 1000).toISOString();
+            } */
             const remainingTime = new Date(m.utcDate).getTime() - new Date().getTime();
             if (remainingTime < MATCH_FETCH_TIME) {
                 setTimeout(() => {
@@ -209,8 +211,13 @@ export class MatchController {
         const userRepository = getRepository(User);
         const tipRepository = getRepository(Tip);
         try {
-            if (!MatchController.matches.find((m) => m.id === matchId)) {
+            const match = MatchController.matches.find((m) => m.id === matchId);
+            if (!match) {
                 res.status(500).send({ message: "Dieses Spiel existiert nicht!" });
+                return;
+            }
+            if (match.status !== MatchStatus.SCHEDULED) {
+                res.status(500).send({ message: "Dieses Spiel hat bereits begonnen!" });
                 return;
             }
             if (!isNumber(scoreHomeTeam) || !isNumber(scoreAwayTeam)) {
