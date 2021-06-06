@@ -1,7 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { User } from "../../_models/User";
-import { Match, MatchStatus, Team } from "../../_models/Match";
+import {
+    Match, MatchStatus, Stage, Team,
+} from "../../_models/Match";
 import { AuthenticationService } from "../../_services/authentication.service";
 import { RemoteService } from "../../_services/remote.service";
 import { AlertService } from "../../_services/alert.service";
@@ -17,6 +19,14 @@ export class MatchComponent implements OnInit {
     public teams: Record<number, Team> = {};
     public experts: User[] = [];
     public untippedMatchCount = 0;
+
+    public stageNames: Record<Stage, string> = {
+        [Stage.GROUP_STAGE]: "Gruppenphase",
+        [Stage.LAST_16]: "Achtelfinale",
+        [Stage.QUARTER_FINAL]: "Viertelfinale",
+        [Stage.SEMI_FINAL]: "Halbfinale",
+        [Stage.FINAL]: "Finale",
+    }
 
     public tipHomeTeam: number;
     public tipAwayTeam: number;

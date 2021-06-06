@@ -13,7 +13,7 @@
                                 <tr class="border-white">
                                     <td><h3>{{match.homeTeam.name}}</h3></td>
                                     <td>
-                                        <span class="d-block text-decoration-underline">Spiel {{match.number}}</span>
+                                        <span class="d-block text-decoration-underline">Spiel {{match.number}} ({{stageNames[match.stage]}})</span>
                                         <span class="d-block"><b>{{match.utcDate | date: 'shortDate'}}, {{match.utcDate | date: 'shortTime'}} Uhr</b></span>
                                         <span class="d-block">{{match.location}}</span>
                                     </td>
