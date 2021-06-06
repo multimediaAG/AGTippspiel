@@ -5,6 +5,8 @@ import { log } from "../utils/utils";
 import { grades } from "../data/grades";
 import * as path from "path";
 import * as fs from "fs";
+import { COUNTRIES, MatchController } from "./MatchController";
+import { CHAMPION_DEADLINE } from "../data/champion";
 
 class UserController {
   public static listAll = async (req: Request, res: Response) => {
@@ -39,6 +41,38 @@ class UserController {
       u.points = parseFloat(u.points as any as string);
       return u;
     }));
+  }
+
+  public static getChampion = async (req: Request, res: Response) => {
+    const tip = (await getRepository(User).findOne(res.locals.jwtPayload.userId)).champion;
+    res.send({
+      teams: MatchController.teams.map((t) => {
+        t.name = COUNTRIES[t.name] || t.name;
+        return t;
+      }),
+      tip,
+    })
+  }
+
+  public static setChampion = async (req: Request, res: Response) => {
+    const { teamId } = req.body;
+
+    if (new Date() > CHAMPION_DEADLINE) {
+      res.status(400).send({ message: "Zu spät, das erste Spiel hat bereits begonnen!" });
+      return;
+    }
+
+    const userRepository = getRepository(User);
+    try {
+      const user = await userRepository.findOne(res.locals.jwtPayload.userId);
+      user.champion = teamId;
+      await userRepository.save(user);
+    } catch (e) {
+      res.status(500).send({message: "Konnte den Tipp nicht speichern!"});
+      return;
+    }
+    log("userchampion changed", { id: res.locals.jwtPayload.userId, teamId });
+    res.status(200).send({success: true});
   }
 
   public static usernameAvailable = async (req: Request, res: Response) => {

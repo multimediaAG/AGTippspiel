@@ -45,6 +45,9 @@ export class User {
   @Column("decimal", {precision: 8, scale: 1 })
   public points: number;
 
+  @Column({default: ""})
+  public champion: string;
+
   @Column()
   @CreateDateColumn()
   public createdAt: Date;

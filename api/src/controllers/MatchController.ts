@@ -54,7 +54,7 @@ const LOCATIONS = {
     325077: "London",
 };
 
-const COUNTRIES = {
+export const COUNTRIES = {
     "Turkey": "Türkei",
     "Italy": "Italien",
     "Wales": "Wales",
@@ -66,7 +66,7 @@ const COUNTRIES = {
     "England": "England",
     "Croatia": "Kroatien",
     "Austria": "Österreich",
-    "North Macedinoa": "Nordmazedonien",
+    "North Macedonia": "Nordmazedonien",
     "Netherlands": "Niederlande",
     "Ukraine": "Ukraine",
     "Scotland": "Schottland",
