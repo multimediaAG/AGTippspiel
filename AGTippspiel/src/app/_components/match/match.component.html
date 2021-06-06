@@ -1,83 +1,86 @@
 <div class="container">
     <div class="row">
         <div class="col-11 col-md-8 mx-auto card p-3 mt-5 text-center">
-            <div class="alert alert-primary" *ngIf="untippedMatchCount > 0">
-                Du hast für {{untippedMatchCount}} {{untippedMatchCount > 1 ? "ausstehende Spiele" : "ausstehendes Spiel"}} noch keinen Tipp abgegeben!<br>
-                Du kannst deinen Tipp auch noch nachträglich ändern.
-            </div>
-            <div class="matches" *ngIf="matches.length > 0 && (teams | keyvalue).length > 0">
-                <table class="table">
-                    <tbody>
-                        <ng-container *ngFor="let match of matches">
-                            <ng-container *ngIf="match.homeTeam.id && match.awayTeam.id">
-                                <tr class="border-white">
-                                    <td class="crest-col"><h3>{{match.homeTeam.name}}</h3></td>
-                                    <td class="content-col">
-                                        <span class="d-block text-decoration-underline">Spiel {{match.number}} ({{stageNames[match.stage]}})</span>
-                                        <span class="d-block"><b>{{match.utcDate | date: 'shortDate'}}, {{match.utcDate | date: 'shortTime'}} Uhr</b></span>
-                                        <span class="d-block">{{match.location}}</span>
-                                        <div class="crest-col-mobile">
-                                            <h3><img [src]="teams[match.homeTeam.id].crestUrl" class="crest-small me-2">{{match.homeTeam.name}} <span class="text-muted">vs.</span> {{match.awayTeam.name}}<img [src]="teams[match.awayTeam.id].crestUrl" class="crest-small ms-2"></h3>
-                                        </div>
-                                    </td>
-                                    <td class="crest-col"><h3>{{match.awayTeam.name}}</h3></td>
-                                </tr>
-                                <tr class="border-white">
-                                    <td class="crest-col">
-                                        <div class="d-flex justify-content-center">
-                                            <img [src]="teams[match.homeTeam.id].crestUrl" class="crest">
-                                        </div>
-                                        <div class="d-flex justify-content-center mt-2">
-                                            <span class="score">{{match.finalScore.homeTeam}}</span>
-                                        </div>
-                                    </td>
-                                    <td class="content-col">
-                                        <ng-container *ngIf="match.myTip.homeTeam === null || match.myTip.awayTeam === null; else showTip">
-                                            <b class="fs-5 d-block text-warning">{{match.status == 'SCHEDULED' ? 'Noch kein' : 'Kein'}} Tipp abgegeben!</b>
-                                            <button class="btn btn-outline-warning mt-3" *ngIf="match.status == 'SCHEDULED'" (click)="openMatchModal(match, matchModal)">Tipp abgeben</button>
-                                        </ng-container>
-                                        <ng-template #showTip>
-                                            <u class="fs-5 d-block mt-3 text-primary">Dein Tipp:</u>
-                                            <b class="fs-5 d-block text-primary">{{match.myTip.homeTeam}}:{{match.myTip.awayTeam}}</b>
-                                            <button class="btn btn-outline-primary mt-3" *ngIf="match.status == 'SCHEDULED'" (click)="openMatchModal(match, matchModal)">Tipp ändern</button>
-                                            <ng-container *ngIf="match.status == 'FINISHED'" >
-                                                <u class="fs-5 d-block mt-3 text-primary">Deine Punkte:</u>
-                                                <b class="fs-5 d-block text-primary">{{match.myPoints}}</b>
-                                            </ng-container>
-                                        </ng-template>
-                                    </td>
-                                    <td class="crest-col">
-                                        <div class="d-flex justify-content-center">
-                                            <img [src]="teams[match.awayTeam.id].crestUrl" class="crest">
-                                        </div>
-                                        <div class="d-flex justify-content-center mt-2">
-                                            <span class="score">{{match.finalScore.awayTeam}}</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="pb-5" colspan="3">
-                                        <app-match-countdown [match]="match" (countdownFinished)="onCountdownFinished(match)"></app-match-countdown>
-                                    </td> 
-                                </tr>
+            <div class="d-flex my-5 justify-content-center" *ngIf="matches.length == 0"><div class="spinner spinner-border text-primary"></div></div>
+                <ng-container *ngIf="matches.length > 0">
+                    <div class="alert alert-primary" *ngIf="untippedMatchCount > 0">
+                        Du hast für {{untippedMatchCount}} {{untippedMatchCount > 1 ? "ausstehende Spiele" : "ausstehendes Spiel"}} noch keinen Tipp abgegeben!<br>
+                        Du kannst deinen Tipp auch noch nachträglich ändern.
+                    </div>
+                    <div class="matches" *ngIf="(teams | keyvalue).length > 0">
+                        <table class="table">
+                            <tbody>
+                                <ng-container *ngFor="let match of matches">
+                                    <ng-container *ngIf="match.homeTeam.id && match.awayTeam.id">
+                                        <tr class="border-white">
+                                            <td class="crest-col"><h3>{{match.homeTeam.name}}</h3></td>
+                                            <td class="content-col">
+                                                <span class="d-block text-decoration-underline">Spiel {{match.number}} ({{stageNames[match.stage]}})</span>
+                                                <span class="d-block"><b>{{match.utcDate | date: 'shortDate'}}, {{match.utcDate | date: 'shortTime'}} Uhr</b></span>
+                                                <span class="d-block">{{match.location}}</span>
+                                                <div class="crest-col-mobile">
+                                                    <h3><img [src]="teams[match.homeTeam.id].crestUrl" class="crest-small me-2">{{match.homeTeam.name}} <span class="text-muted">vs.</span> {{match.awayTeam.name}}<img [src]="teams[match.awayTeam.id].crestUrl" class="crest-small ms-2"></h3>
+                                                </div>
+                                            </td>
+                                            <td class="crest-col"><h3>{{match.awayTeam.name}}</h3></td>
+                                        </tr>
+                                        <tr class="border-white">
+                                            <td class="crest-col">
+                                                <div class="d-flex justify-content-center">
+                                                    <img [src]="teams[match.homeTeam.id].crestUrl" class="crest">
+                                                </div>
+                                                <div class="d-flex justify-content-center mt-2">
+                                                    <span class="score">{{match.finalScore.homeTeam}}</span>
+                                                </div>
+                                            </td>
+                                            <td class="content-col">
+                                                <ng-container *ngIf="match.myTip.homeTeam === null || match.myTip.awayTeam === null; else showTip">
+                                                    <b class="fs-5 d-block text-warning">{{match.status == 'SCHEDULED' ? 'Noch kein' : 'Kein'}} Tipp abgegeben!</b>
+                                                    <button class="btn btn-outline-warning mt-3" *ngIf="match.status == 'SCHEDULED'" (click)="openMatchModal(match, matchModal)">Tipp abgeben</button>
+                                                </ng-container>
+                                                <ng-template #showTip>
+                                                    <u class="fs-5 d-block mt-3 text-primary">Dein Tipp:</u>
+                                                    <b class="fs-5 d-block text-primary">{{match.myTip.homeTeam}}:{{match.myTip.awayTeam}}</b>
+                                                    <button class="btn btn-outline-primary mt-3" *ngIf="match.status == 'SCHEDULED'" (click)="openMatchModal(match, matchModal)">Tipp ändern</button>
+                                                    <ng-container *ngIf="match.status == 'FINISHED'" >
+                                                        <u class="fs-5 d-block mt-3 text-primary">Deine Punkte:</u>
+                                                        <b class="fs-5 d-block text-primary">{{match.myPoints}}</b>
+                                                    </ng-container>
+                                                </ng-template>
+                                            </td>
+                                            <td class="crest-col">
+                                                <div class="d-flex justify-content-center">
+                                                    <img [src]="teams[match.awayTeam.id].crestUrl" class="crest">
+                                                </div>
+                                                <div class="d-flex justify-content-center mt-2">
+                                                    <span class="score">{{match.finalScore.awayTeam}}</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="pb-5" colspan="3">
+                                                <app-match-countdown [match]="match" (countdownFinished)="onCountdownFinished(match)"></app-match-countdown>
+                                            </td> 
+                                        </tr>
+                                    </ng-container>
                                 </ng-container>
-                        </ng-container>
-                    </tbody>
-                </table>
+                            </tbody>
+                        </table>
+                    </div>
+                </ng-container>
             </div>
         </div>
     </div>
-</div>
-
-<ng-template #matchModal let-modal>
-    <div class="modal-header d-flex justify-content-between">
-        <h4 class="modal-title flex-fill text-center">
-            <img [src]="teams[currentMatch.homeTeam.id].crestUrl" class="crest">
-            <span class="mx-2">{{currentMatch.homeTeam.name}} vs. {{currentMatch.awayTeam.name}}</span>
-            <img [src]="teams[currentMatch.awayTeam.id].crestUrl" class="crest">
-        </h4>
-        <button type="button" class="btn close" (click)="modal.dismiss('Cross click')">
-            <span>&times;</span>
+    
+    <ng-template #matchModal let-modal>
+        <div class="modal-header d-flex justify-content-between">
+            <h4 class="modal-title flex-fill text-center">
+                <img [src]="teams[currentMatch.homeTeam.id].crestUrl" class="crest">
+                <span class="mx-2">{{currentMatch.homeTeam.name}} vs. {{currentMatch.awayTeam.name}}</span>
+                <img [src]="teams[currentMatch.awayTeam.id].crestUrl" class="crest">
+            </h4>
+            <button type="button" class="btn close" (click)="modal.dismiss('Cross click')">
+                <span>&times;</span>
         </button>
     </div>
     <div class="modal-body">
