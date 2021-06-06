@@ -9,7 +9,7 @@
             "removeImports": ["bcryptjs", "typeorm"]
         },
         {
-            "src": "AGTippspiel/src/app/_data/grades.ts",
+            "src": "AGTippspiel/src/app/_data/*.ts",
             "dest": "api/src/data/"
         }
     ]
