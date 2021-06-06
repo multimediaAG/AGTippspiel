@@ -107,31 +107,12 @@ export class MatchController {
         const user = await getRepository(User).findOne(res.locals.jwtPayload.userId);
         const tipRepository = getRepository(Tip);
         const myTips = await tipRepository.find({where: { user }});
-        const allExpertTips = await tipRepository.createQueryBuilder('tip')
-        .innerJoinAndSelect('tip.user', 'user')
-        .where('user.isExpert = true').getMany();
+        const allExpertTips = await MatchController.getAllExpertTips(tipRepository);
         res.send(MatchController.matches.map((m) => {
             const match = copy(m) as Match;
-            const expertTipps = allExpertTips.filter((t) => t.matchId == match.id);
             const tip = myTips.find((t) => t.matchId == match.id);
-
-            const expertCountHomeTeam = expertTipps.filter((t) => t.scoreAwayTeam < t.scoreHomeTeam).length;
-            const expertCountAwayTeam = expertTipps.filter((t) => t.scoreAwayTeam > t.scoreHomeTeam).length;
-            const expertCountDraw = expertTipps.filter((t) => t.scoreAwayTeam == t.scoreHomeTeam).length;
-            const expertCountTotal = expertCountHomeTeam + expertCountDraw + expertCountAwayTeam;
-
-            match.expertOdds = {
-                points: {
-                    homeTeam: MatchController.round(10 * (expertCountDraw + expertCountAwayTeam) / expertCountTotal) || 0,
-                    draw: MatchController.round(10 * (expertCountHomeTeam + expertCountAwayTeam) / expertCountTotal) || 0,
-                    awayTeam: MatchController.round(10 * (expertCountHomeTeam + expertCountDraw) / expertCountTotal) || 0,
-                },
-                count: {
-                    homeTeam: expertCountHomeTeam,
-                    draw: expertCountDraw,
-                    awayTeam: expertCountAwayTeam,
-                }
-            };
+            const expertTipps = allExpertTips.filter((t) => t.matchId == match.id);
+            MatchController.addExpertOdds(expertTipps, match);
             match.expertTips = Object.fromEntries(expertTipps.map((expertTip) => {
                 return [
                     expertTip.user.id,
@@ -145,7 +126,7 @@ export class MatchController {
             if (tip) {
                 match.myTip.homeTeam = tip.scoreHomeTeam;
                 match.myTip.awayTeam = tip.scoreAwayTeam;
-                match.myPoints = MatchController.getMyPoints(match, tip);
+                match.myPoints = MatchController.getPointsForTip(match, tip);
             } else {
                 match.myPoints = 0;
             }
@@ -157,7 +138,33 @@ export class MatchController {
         res.send(MatchController.teams);
     }
 
-    private static getMyPoints(match: Match, tip: Tip): number | null {
+    private static async getAllExpertTips(tipRepository) {
+        return await tipRepository.createQueryBuilder('tip')
+            .innerJoinAndSelect('tip.user', 'user')
+            .where('user.isExpert = true').getMany();
+    }
+
+    private static addExpertOdds(expertTipps: Tip[], match: Match) {
+        const expertCountHomeTeam = expertTipps.filter((t) => t.scoreAwayTeam < t.scoreHomeTeam).length;
+        const expertCountAwayTeam = expertTipps.filter((t) => t.scoreAwayTeam > t.scoreHomeTeam).length;
+        const expertCountDraw = expertTipps.filter((t) => t.scoreAwayTeam == t.scoreHomeTeam).length;
+        const expertCountTotal = expertCountHomeTeam + expertCountDraw + expertCountAwayTeam;
+
+        match.expertOdds = {
+            points: {
+                homeTeam: MatchController.round(10 * (expertCountDraw + expertCountAwayTeam) / expertCountTotal) || 0,
+                draw: MatchController.round(10 * (expertCountHomeTeam + expertCountAwayTeam) / expertCountTotal) || 0,
+                awayTeam: MatchController.round(10 * (expertCountHomeTeam + expertCountDraw) / expertCountTotal) || 0,
+            },
+            count: {
+                homeTeam: expertCountHomeTeam,
+                draw: expertCountDraw,
+                awayTeam: expertCountAwayTeam,
+            }
+        };
+    }
+
+    private static getPointsForTip(match: Match, tip: Tip): number | null {
         if (match.status !== MatchStatus.FINISHED) {
             return null;
         }
@@ -217,7 +224,7 @@ export class MatchController {
         });
         this.matches = (await request.json())?.matches.map((m: Match, i) => {
             /* ONLY FOR TESTING */
-            if (i == 0) {
+            /* if (i == 0) {
                 m.status = MatchStatus.FINISHED;
                 m.stage = Stage.LAST_16;
                 m.score = {
@@ -240,7 +247,7 @@ export class MatchController {
                         homeTeam: null,
                     },
                 };
-            }
+            } */
             m.number = i + 1;
             m.finalScore = {
                 homeTeam: m.score.penalties.homeTeam ?? m.score.extraTime.homeTeam ?? m.score.fullTime.homeTeam,
@@ -267,6 +274,9 @@ export class MatchController {
             MatchController.updateMatchStatus(m);
             return m;
         }) || MatchController.matches || [];
+        if (this.matches.length > 0) {
+            MatchController.calculateUserPoints();
+        }
     }
 
     private static updateMatchStatus(m: Match) {
@@ -277,6 +287,24 @@ export class MatchController {
 
     private static round(v: number) {
         return Math.ceil(v * 10) / 10;
+    }
+
+    private static async calculateUserPoints() {
+        const userRepository = getRepository(User);
+        const users = await userRepository.find({ relations: ["tips"] });
+        const allExpertTips = await MatchController.getAllExpertTips(getRepository(Tip));
+        const matches: Record<string, Match> = {};
+        for (const m of MatchController.matches) {
+            const match = copy(m);
+            const expertTipps = allExpertTips.filter((t) => t.matchId == match.id);
+            MatchController.addExpertOdds(expertTipps, match);
+            matches[match.id] = match;
+        }
+            
+        for (const user of users) {
+            user.points = user.tips.map((t) => MatchController.getPointsForTip(matches[t.matchId], t)).reduce((a, b) => a + b, 0);
+        }
+        await userRepository.save(users);
     }
 
     private static async loadTeams() {

@@ -12,8 +12,9 @@ class UserController {
     const users = await userRepository.find({ relations: ["tips"] });
     res.send(users.map((u) => {
       u.realName = undefined;
+      u.points = parseFloat(u.points as any as string);
       return u;
-    }));
+    }).sort((a, b) => b.points - a.points));
   }
   public static listExperts = async (req: Request, res: Response) => {
     const userRepository = getRepository(User);
@@ -34,7 +35,10 @@ class UserController {
   public static listAllAdmin = async (req: Request, res: Response) => {
     const userRepository = getRepository(User);
     const users = await userRepository.find({ relations: ["tips"] });
-    res.send(users);
+    res.send(users.map((u) => {
+      u.points = parseFloat(u.points as any as string);
+      return u;
+    }));
   }
 
   public static usernameAvailable = async (req: Request, res: Response) => {

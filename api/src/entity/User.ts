@@ -42,11 +42,13 @@ export class User {
   @OneToMany(() => Tip, (tip) => tip.user)
   public tips: Tip[];
 
+  @Column("decimal", {precision: 8, scale: 1 })
+  public points: number;
+
   @Column()
   @CreateDateColumn()
   public createdAt: Date;
 
-  public points?: number;
   public place?: number;
 
   public hashPassword() {

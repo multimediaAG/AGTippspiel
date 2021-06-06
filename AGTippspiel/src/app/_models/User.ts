@@ -44,10 +44,12 @@
 /* do not edit */   public tips: Tip[];
 /* do not edit */
 /* do not edit */   
+/* do not edit */   public points: number;
+/* do not edit */
+/* do not edit */   
 /* do not edit */   
 /* do not edit */   public createdAt: Date;
 /* do not edit */
-/* do not edit */   public points?: number;
 /* do not edit */   public place?: number;
 /* do not edit */
 /* do not edit */   
