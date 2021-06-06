@@ -21,3 +21,18 @@ img.expert-picture {
     max-height: 5rem;
     border-radius: 1rem;
 }
+.crest-col-mobile {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .crest-col {
+        display: none;
+    }
+    .crest-col-mobile {
+        display: block;
+        .crest-small {
+            height: 1rem;
+        }
+    }
+}

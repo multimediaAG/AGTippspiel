@@ -11,16 +11,19 @@
                         <ng-container *ngFor="let match of matches">
                             <ng-container *ngIf="match.homeTeam.id && match.awayTeam.id">
                                 <tr class="border-white">
-                                    <td><h3>{{match.homeTeam.name}}</h3></td>
-                                    <td>
+                                    <td class="crest-col"><h3>{{match.homeTeam.name}}</h3></td>
+                                    <td class="content-col">
                                         <span class="d-block text-decoration-underline">Spiel {{match.number}} ({{stageNames[match.stage]}})</span>
                                         <span class="d-block"><b>{{match.utcDate | date: 'shortDate'}}, {{match.utcDate | date: 'shortTime'}} Uhr</b></span>
                                         <span class="d-block">{{match.location}}</span>
+                                        <div class="crest-col-mobile">
+                                            <h3><img [src]="teams[match.homeTeam.id].crestUrl" class="crest-small me-2">{{match.homeTeam.name}} <span class="text-muted">vs.</span> {{match.awayTeam.name}}<img [src]="teams[match.awayTeam.id].crestUrl" class="crest-small ms-2"></h3>
+                                        </div>
                                     </td>
-                                    <td><h3>{{match.awayTeam.name}}</h3></td>
+                                    <td class="crest-col"><h3>{{match.awayTeam.name}}</h3></td>
                                 </tr>
                                 <tr class="border-white">
-                                    <td>
+                                    <td class="crest-col">
                                         <div class="d-flex justify-content-center">
                                             <img [src]="teams[match.homeTeam.id].crestUrl" class="crest">
                                         </div>
@@ -28,7 +31,7 @@
                                             <span class="score">{{match.finalScore.homeTeam}}</span>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="content-col">
                                         <ng-container *ngIf="match.myTip.homeTeam === null || match.myTip.awayTeam === null; else showTip">
                                             <b class="fs-5 d-block text-warning">{{match.status == 'SCHEDULED' ? 'Noch kein' : 'Kein'}} Tipp abgegeben!</b>
                                             <button class="btn btn-outline-warning mt-3" *ngIf="match.status == 'SCHEDULED'" (click)="openMatchModal(match, matchModal)">Tipp abgeben</button>
@@ -43,7 +46,7 @@
                                             </ng-container>
                                         </ng-template>
                                     </td>
-                                    <td>
+                                    <td class="crest-col">
                                         <div class="d-flex justify-content-center">
                                             <img [src]="teams[match.awayTeam.id].crestUrl" class="crest">
                                         </div>
