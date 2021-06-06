@@ -224,11 +224,18 @@ export class MatchController {
         });
         this.matches = (await request.json())?.matches.map((m: Match, i) => {
             /* ONLY FOR TESTING */
-            /* if (i == 0) {
+            /* if (m.stage == Stage.FINAL) {
                 m.status = MatchStatus.FINISHED;
-                m.stage = Stage.LAST_16;
+                m.homeTeam = {
+                    id: "768",
+                    name: "Slovakia"
+                };
+                m.awayTeam = {
+                    id: "770",
+                    name: "England"
+                };
                 m.score = {
-                    winner: Winner.DRAW,
+                    winner: Winner.AWAY_TEAM,
                     duration: null,
                     halfTime: {
                         awayTeam: 0,
@@ -300,9 +307,16 @@ export class MatchController {
             MatchController.addExpertOdds(expertTipps, match);
             matches[match.id] = match;
         }
-            
+        const final = MatchController.matches.find((m) => m.stage == Stage.FINAL);
+        let champion;
+        if (final) {
+            champion = final.score.winner == Winner.HOME_TEAM ? final.homeTeam.id : final.awayTeam.id;
+        }
         for (const user of users) {
             user.points = user.tips.map((t) => MatchController.getPointsForTip(matches[t.matchId], t)).reduce((a, b) => a + b, 0);
+            if (champion && user.champion == champion) {
+                user.points += 80;
+            }
         }
         await userRepository.save(users);
     }
