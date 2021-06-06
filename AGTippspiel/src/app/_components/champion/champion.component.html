@@ -1,0 +1,25 @@
+<div class="container pt-5 text-center">
+    <div class="card p-4">
+        <h1>Europameister</h1>
+        <ng-container *ngIf="loaded">
+
+            <div class="alert alert-success" *ngIf="!closed">
+                Hier kannst Du auf den Europameister tippen. Du kannst Deinen Tipp noch bis zum  <b>{{championDeadline | date: "fullDate"}}, {{championDeadline | date: "mediumTime"}} Uhr</b> ändern.
+            </div>
+            <div class="alert alert-info" *ngIf="!closed">
+                Europameister wird: <select class="form-select d-inline w-50" [ngModel]="tip" (ngModelChange)="updateTip($event)">
+                    <option *ngFor="let team of teams" [value]="team.id">{{team.name}}</option>
+                </select>
+            </div>
+            <div class="alert alert-info" *ngIf="closed">
+                <ng-container *ngIf="tip">
+                    Du hast getippt, dass <b>{{tipTeamName}}</b> Europameister wird.
+                </ng-container>
+                <ng-container *ngIf="!tip">
+                    Du hast nicht auf den Europameister getippt.
+                </ng-container>
+            </div>
+        </ng-container>
+        <div class="d-flex mt-5 pt-5 justify-content-center" *ngIf="!loaded"><div class="spinner spinner-border text-primary"></div></div>
+    </div>
+</div>

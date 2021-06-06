@@ -47,6 +47,9 @@
 /* do not edit */   public points: number;
 /* do not edit */
 /* do not edit */   
+/* do not edit */   public champion: string;
+/* do not edit */
+/* do not edit */   
 /* do not edit */   
 /* do not edit */   public createdAt: Date;
 /* do not edit */

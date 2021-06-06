@@ -10,6 +10,9 @@
                 <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.loggedIn">
                     <a class="nav-link" routerLink="/matches" (click)="navbarCollapsed = true">Spielplan</a>
                 </li>
+                <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.loggedIn">
+                    <a class="nav-link" routerLink="/champion" (click)="navbarCollapsed = true">Europameister</a>
+                </li>
                 <li class="nav-item" routerLinkActive="active">
                     <a class="nav-link" routerLink="/scores" (click)="navbarCollapsed = true">Bestenliste</a>
                 </li>

@@ -9,6 +9,7 @@ import { AuthenticationGuard } from "./_guards/authentication.guard";
 import { UsersComponent } from "./_components/users/users.component";
 import { AdminGuard } from "./_guards/admin.guard";
 import { MatchComponent } from "./_components/match/match.component";
+import { ChampionComponent } from "./_components/champion/champion.component";
 
 const routes: Routes = [
     {
@@ -30,6 +31,11 @@ const routes: Routes = [
     {
         path: "matches",
         component: MatchComponent,
+        canActivate: [AuthenticationGuard],
+    },
+    {
+        path: "champion",
+        component: ChampionComponent,
         canActivate: [AuthenticationGuard],
     },
     {
