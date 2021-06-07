@@ -24,10 +24,10 @@ export class User {
   @Column()
   public grade: string;
 
-  @Column()
+  @Column({default: false})
   public isAdmin: boolean;
 
-  @Column()
+  @Column({default: false})
   public isExpert: boolean;
 
   @Column({default: ""})
