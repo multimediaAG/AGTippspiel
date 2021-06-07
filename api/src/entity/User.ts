@@ -42,7 +42,7 @@ export class User {
   @OneToMany(() => Tip, (tip) => tip.user)
   public tips: Tip[];
 
-  @Column("decimal", {precision: 8, scale: 1 })
+  @Column("decimal", {precision: 8, scale: 1, default: 0 })
   public points: number;
 
   @Column({default: ""})
