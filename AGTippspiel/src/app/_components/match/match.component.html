@@ -182,7 +182,6 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th></th>
                             <th><img [src]="teams[currentMatch.homeTeam.id].crestUrl" class="crest m-2"></th>
                             <th><img [src]="teams[currentMatch.awayTeam.id].crestUrl" class="crest m-2"></th>
                         </tr>
@@ -190,8 +189,7 @@
                     <tbody>
                         <tr *ngFor="let expert of experts">
                             <td><img class="expert-picture" [src]="getExpertPictureUrl(expert)"></td>
-                            <td>{{expert.realName}}</td>
-                            <td><span class="text-muted">aka</span><br><i>{{expert.username}}</i></td>
+                            <td>{{expert.realName}}<br><span class="text-muted">(<i>{{expert.username}}</i>)</span></td>
                             <td>{{expert.expertPosition}}</td>
                             <td>{{expert.expertText}}</td>
                             <td><span class="score">{{currentMatch.expertTips[expert.id]?.homeTeam}}</span></td>
