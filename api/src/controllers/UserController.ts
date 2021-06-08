@@ -28,7 +28,7 @@ class UserController {
 
   public static serveExpertPicture = async (req: Request, res: Response) => {
     const id = req.params.id.replace(/\//g, "").replace(/\./g, "").replace(/\\/g, "");
-    const s = path.resolve(path.join(req.app.locals.config.UPLOAD_FILE_PATH, `${id}.jpg`));
+    const s = path.join(req.app.locals.config.UPLOAD_FILE_PATH, `${id}.jpg`);
     if (fs.existsSync(s)) {
       res.sendFile(s);
     } else {
