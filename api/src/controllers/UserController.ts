@@ -13,7 +13,9 @@ class UserController {
     const userRepository = getRepository(User);
     const users = await userRepository.find({ relations: ["tips"] });
     res.send(users.map((u) => {
-      u.realName = undefined;
+      if (!u.showRealName) {
+        u.realName = undefined;
+      }
       u.points = parseFloat(u.points as any as string);
       return u;
     }).sort((a, b) => b.points - a.points));
@@ -82,7 +84,7 @@ class UserController {
   }
 
   public static newUser = async (req: Request, res: Response) => {
-    const { username, password, passwordVerify, realName, grade } = req.body;
+    const { username, password, passwordVerify, realName, grade, showRealName } = req.body;
     if (!(username && realName && password && passwordVerify && grade)) {
       res.status(400).send({message: "Nicht alle Felder ausgefüllt!"});
       return;
@@ -100,6 +102,7 @@ class UserController {
     user.username = username;
     user.realName = realName;
     user.password = password;
+    user.showRealName = !!showRealName;
     user.grade = grade;
     user.isAdmin = false;
     user.isExpert = false;
@@ -186,6 +189,21 @@ class UserController {
     }
     log("userexpertstatus changed", { id, expert });
     res.status(200).send({status: true});
+  }
+
+  public static changeShowRealName = async (req: Request, res: Response) => {
+    const { showRealName } = req.body;
+
+    const userRepository = getRepository(User);
+    try {
+      const user = await userRepository.findOne(res.locals.jwtPayload.userId);
+      user.showRealName = !!showRealName;
+      await userRepository.save(user);
+    } catch (e) {
+      res.status(500).send({ message: "Konnte die Einstellungen nicht speichern!" });
+    }
+    log("userexpertstatus changed", { userId: res.locals.jwtPayload.userId, showRealName });
+    res.status(200).send({success: true});
   }
 
   public static changeExpertInfo = async (req: Request, res: Response) => {
