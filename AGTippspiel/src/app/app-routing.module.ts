@@ -10,6 +10,7 @@ import { UsersComponent } from "./_components/users/users.component";
 import { AdminGuard } from "./_guards/admin.guard";
 import { MatchComponent } from "./_components/match/match.component";
 import { ChampionComponent } from "./_components/champion/champion.component";
+import { SettingsComponent } from "./_components/settings/settings.component";
 
 const routes: Routes = [
     {
@@ -36,6 +37,11 @@ const routes: Routes = [
     {
         path: "champion",
         component: ChampionComponent,
+        canActivate: [AuthenticationGuard],
+    },
+    {
+        path: "settings",
+        component: SettingsComponent,
         canActivate: [AuthenticationGuard],
     },
     {

@@ -25,7 +25,14 @@
                     <tbody>
                         <tr *ngFor="let user of users">
                             <td>{{user.place}}</td>
-                            <td *ngIf="currentView.id != 'grades-absolute' && currentView.id != 'grades-relative'">{{user.username}}</td>
+                            <td *ngIf="currentView.id != 'grades-absolute' && currentView.id != 'grades-relative'">
+                                <ng-container *ngIf="user.showRealName">
+                                    {{user.realName}} <span class="text-muted">(<i>{{user.username}}</i>)</span>
+                                </ng-container>
+                                <ng-container *ngIf="!user.showRealName">
+                                    <i>{{user.username}}</i>
+                                </ng-container>
+                            </td>
                             <td>{{user.grade}}</td>
                             <td>{{user.points}}</td>
                         </tr>

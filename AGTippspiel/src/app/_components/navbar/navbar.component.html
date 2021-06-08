@@ -19,6 +19,9 @@
                 <li class="nav-item" routerLinkActive="active">
                     <a class="nav-link" routerLink="/rules" (click)="navbarCollapsed = true">Regeln</a>
                 </li>
+                <li class="nav-item" routerLinkActive="active" *ngIf="authenticationService.loggedIn">
+                    <a class="nav-link" routerLink="/settings" (click)="navbarCollapsed = true">Einstellungen</a>
+                </li>
                 <li class="nav-item ms-4" routerLinkActive="active" *ngIf="authenticationService.loggedIn && authenticationService.currentUser.isAdmin">
                     <a class="nav-link" routerLink="/users" (click)="navbarCollapsed = true">Benutzer</a>
                 </li>

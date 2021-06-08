@@ -26,6 +26,7 @@ import { MatchComponent } from "./_components/match/match.component";
 import { MatchCountdownComponent } from "./_components/match-countdown/match-countdown.component";
 import { environment } from "../environments/environment";
 import { ChampionComponent } from "./_components/champion/champion.component";
+import { SettingsComponent } from "./_components/settings/settings.component";
 
 registerLocaleData(localeDe);
 
@@ -44,6 +45,7 @@ registerLocaleData(localeDe);
         MatchComponent,
         MatchCountdownComponent,
         ChampionComponent,
+        SettingsComponent,
     ],
     imports: [
         BrowserModule,

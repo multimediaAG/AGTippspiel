@@ -34,6 +34,7 @@ export class SignupComponent implements OnInit {
             name: new FormControl("", [Validators.minLength(this.minNameLength), Validators.pattern(/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u), Validators.required]),
             password: new FormControl("", [Validators.minLength(this.minPasswordLength), Validators.required]),
             passwordVerify: new FormControl(""),
+            showRealName: new FormControl(false),
         });
     }
 
@@ -51,6 +52,7 @@ export class SignupComponent implements OnInit {
                 password: this.f.password.value,
                 passwordVerify: this.f.passwordVerify.value,
                 grade: this.f.grade.value,
+                showRealName: this.f.showRealName.value,
             }).subscribe((data: any) => {
                 if (data && data.status) {
                     this.loading = false;

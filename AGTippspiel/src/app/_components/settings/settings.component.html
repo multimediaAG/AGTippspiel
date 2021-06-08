@@ -1,0 +1,25 @@
+<div class="container pt-5 text-center">
+    <div class="card p-4">
+        <h1>Einstellungen</h1>
+        <div class="alert alert-info text-left">            
+            <div class="mb-3">
+                <label class="form-label">In der Bestenliste soll</label>
+                <div class="ms-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="showRealNameNo" [value]="false" [ngModel]="showRealName" (ngModelChange)="updateShowRealName($event)">
+                        <label class="form-check-label" for="showRealNameNo">
+                            nur mein Benutzername
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="showRealNameYes" [value]="true" [ngModel]="showRealName" (ngModelChange)="updateShowRealName($event)">
+                        <label class="form-check-label" for="showRealNameYes">
+                            mein richtiger Name und mein Benutzername
+                        </label>
+                    </div>
+                </div>
+                <label class="form-label">angezeigt werden. Dies kann jederzeit geändert werden.</label>
+            </div>
+        </div>
+    </div>
+</div>

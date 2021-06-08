@@ -26,6 +26,9 @@
 /* do not edit */   public grade: string;
 /* do not edit */
 /* do not edit */   
+/* do not edit */   public showRealName: boolean;
+/* do not edit */
+/* do not edit */   
 /* do not edit */   public isAdmin: boolean;
 /* do not edit */
 /* do not edit */   

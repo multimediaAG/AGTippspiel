@@ -7,7 +7,7 @@
             <form [formGroup]="signupForm" (ngSubmit)="signup()">
                 <div class="mb-3">
                     <label class="form-label" for="name">Vor- und Nachname:</label>
-                    <input class="form-control mb-2" placeholder="Vor- und Nachname" formControlName="name" [class.is-invalid]="submitted && f.name.errors" [class.is-valid]="!f.name.errors">
+                    <input class="form-control mb-2" id="name" placeholder="Vor- und Nachname" formControlName="name" [class.is-invalid]="submitted && f.name.errors" [class.is-valid]="!f.name.errors">
                     <div class="valid-feedback">
                         Name gültig!
                     </div>
@@ -16,8 +16,8 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="username">Klasse:</label>
-                    <select class="form-control mb-2" formControlName="grade" [class.is-invalid]="submitted && f.grade.errors" [class.is-valid]="!f.grade.errors">
+                    <label class="form-label" for="grade">Klasse:</label>
+                    <select class="form-control mb-2" id="grade" formControlName="grade" [class.is-invalid]="submitted && f.grade.errors" [class.is-valid]="!f.grade.errors">
                         <option disabled selected value="">-- Bitte wählen --</option>
                         <option *ngFor="let grade of grades" [value]="grade">{{grade}}</option>
                     </select>
@@ -30,13 +30,31 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="username">Benutzername:</label>
-                    <input class="form-control mb-2" placeholder="Benutzername" formControlName="username" [class.is-invalid]="submitted && f.username.errors || f.username.errors?.usernameTaken" [class.is-valid]="!f.username.errors">
+                    <input class="form-control mb-2" id="username" placeholder="Benutzername" formControlName="username" [class.is-invalid]="submitted && f.username.errors || f.username.errors?.usernameTaken" [class.is-valid]="!f.username.errors">
                     <div class="valid-feedback">
                         Benutzername gültig!
                     </div>
                     <div class="invalid-feedback">
                         {{ f.username.errors?.usernameTaken ? "Der Benutzername existiert schon!" : "Der Benutzername muss zwischen 2 und 20 Zeichen lang sein!" }}
                     </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">In der Bestenliste soll</label>
+                    <div class="ms-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="showRealNameNo" [value]="false" formControlName="showRealName">
+                            <label class="form-check-label" for="showRealNameNo">
+                                nur mein Benutzername
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="showRealNameYes" [value]="true" formControlName="showRealName">
+                            <label class="form-check-label" for="showRealNameYes">
+                                mein richtiger Name und mein Benutzername
+                            </label>
+                        </div>
+                    </div>
+                    <label class="form-label">angezeigt werden. Dies kann jederzeit geändert werden.</label>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="password">Passwort:</label>
