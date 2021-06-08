@@ -64,7 +64,7 @@ export class ScoresComponent {
         } else if (this.currentView.id == "parents") {
             this.users = this.allUsers.filter((u) => u.grade == "Eltern");
         } else if (this.currentView.id == "grades-relative" || this.currentView.id == "grades-absolute") {
-            const grades = {};
+            const grades: Record<string, { points: number, users: number }> = {};
             for (const user of this.allUsers) {
                 if (!grades[user.grade]) {
                     grades[user.grade] = {
@@ -75,6 +75,12 @@ export class ScoresComponent {
                 grades[user.grade].points += user.points;
                 grades[user.grade].users++;
             }
+
+            grades.Experten = {
+                points: this.allUsers.filter((u) => u.isExpert).reduce((a, b) => a + b.points, 0),
+                users: this.allUsers.filter((u) => u.isExpert).length,
+            };
+
             this.users = [];
             for (const [grade, d] of Object.entries(grades) as any) {
                 let points = this.currentView.id == "grades-absolute" ? d.points : Math.round(d.points / d.users);
