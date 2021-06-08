@@ -25,6 +25,9 @@ export class User {
   public grade: string;
 
   @Column({default: false})
+  public showRealName: boolean;
+
+  @Column({default: false})
   public isAdmin: boolean;
 
   @Column({default: false})
