@@ -18,6 +18,7 @@
                         <tr>
                             <th class="border-top-0">Platz</th>
                             <th class="border-top-0" *ngIf="currentView.id != 'grades-absolute' && currentView.id != 'grades-relative'">Benutzer</th>
+                            <th></th>
                             <th class="border-top-0">Klasse</th>
                             <th class="border-top-0">Punkte</th>
                         </tr>
@@ -33,7 +34,12 @@
                                     <i>{{user.username}}</i>
                                 </ng-container>
                             </td>
-                            <td>{{user.grade}}</td>
+                            <td>
+                                <span *ngIf="user.isExpert" class="badge bg-success ms-5"><i class="fas fa-check"></i> Experte</span>
+                            </td>
+                            <td>{{user.grade}}
+                                <span *ngIf="(currentView.id == 'grades-absolute' || currentView.id == 'grades-relative') && user.grade == 'Experten'" class="badge bg-success ms-5"><i class="fas fa-check"></i> Experten</span>
+                            </td>
                             <td>{{user.points}}</td>
                         </tr>
                     </tbody>
