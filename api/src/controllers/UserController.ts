@@ -13,7 +13,7 @@ class UserController {
     const userRepository = getRepository(User);
     const users = await userRepository.find({ relations: ["tips"] });
     res.send(users.map((u) => {
-      if (!u.showRealName) {
+      if (!u.showRealName && !u.isExpert) {
         u.realName = undefined;
       }
       u.points = parseFloat(u.points as any as string);
