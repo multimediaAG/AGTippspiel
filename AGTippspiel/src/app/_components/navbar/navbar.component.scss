@@ -1,12 +1,16 @@
-$blue: #3498db;
+$borderColor: #ffffff;
 .nav-item {
     padding-left: 5px;
     &.active {
-        border-left: 5px solid $blue;
+        border-left: 5px solid $borderColor;
     }
     &:not(.active) {
         border-left: 5px solid transparent;
     }
+}
+
+.navbar {
+    background: linear-gradient(90deg, rgb(128, 36, 58) 0%, rgb(136, 90, 56) 100%);
 }
 
 @media (min-width: 992px) {
@@ -14,7 +18,7 @@ $blue: #3498db;
         padding-left: 0;
         border-left: none !important;
         &.active {
-            border-bottom: 5px solid $blue;
+            border-bottom: 5px solid $borderColor;
         }
         &:not(.active) {
             border-bottom: 5px solid transparent;
