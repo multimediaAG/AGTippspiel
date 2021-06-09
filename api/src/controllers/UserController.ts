@@ -49,7 +49,7 @@ class UserController {
     const tip = (await getRepository(User).findOne(res.locals.jwtPayload.userId)).champion;
     res.send({
       teams: MatchController.teams.map((t) => {
-        t.name = COUNTRIES[t.name] || t.name;
+        t.name = COUNTRIES[t.name]?.name || t.name;
         return t;
       }),
       tip,
