@@ -16,8 +16,8 @@ const upload = multer({
 });
 
 router.get("/admin", [checkJwt, checkForAdmin()], UserController.listAllAdmin);
-router.get("/", UserController.listAll);
-router.get("/experts", UserController.listExperts);
+router.get("/", [checkJwt], UserController.listAll);
+router.get("/experts", [checkJwt], UserController.listExperts);
 router.post("/showRealName", [checkJwt], UserController.changeShowRealName);
 router.post("/:id([0-9]+)/admin", [checkJwt, checkForAdmin()], UserController.changeAdminStatus);
 router.post("/:id([0-9]+)/expert", [checkJwt, checkForAdmin()], UserController.changeExpertStatus);
