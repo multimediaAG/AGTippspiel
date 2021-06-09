@@ -59,7 +59,9 @@ export class MatchComponent implements OnInit {
     private updateUntippedCount() {
         this.untippedMatchCount = this.matches.filter((m) => m.status == MatchStatus.SCHEDULED
             && (m.myTip.awayTeam === null
-                || m.myTip.homeTeam === null)).length;
+                || m.myTip.homeTeam === null)
+            && m.homeTeam?.id
+            && m.awayTeam?.id).length;
     }
 
     public onCountdownFinished(match: Match): void {
