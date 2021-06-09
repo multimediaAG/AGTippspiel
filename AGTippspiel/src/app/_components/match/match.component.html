@@ -19,7 +19,7 @@
                                                 <span class="d-block"><b>{{match.utcDate | date: 'shortDate'}}, {{match.utcDate | date: 'shortTime'}} Uhr</b></span>
                                                 <span class="d-block">{{match.location}}</span>
                                                 <div class="crest-col-mobile">
-                                                    <h3><img [src]="teams[match.homeTeam.id].cc + '.svg'" class="crest-small me-2">{{match.homeTeam.name}} <span class="text-muted">vs.</span> {{match.awayTeam.name}}<img [src]="teams[match.awayTeam.id].cc + '.svg'" class="crest-small ms-2"></h3>
+                                                    <h3><img [src]="'/assets/flags/' + teams[match.homeTeam.id].cc + '.svg'" class="crest-small me-2">{{match.homeTeam.name}} <span class="text-muted">vs.</span> {{match.awayTeam.name}}<img [src]="'/assets/flags/' + teams[match.awayTeam.id].cc + '.svg'" class="crest-small ms-2"></h3>
                                                 </div>
                                             </td>
                                             <td class="crest-col"><h3>{{match.awayTeam.name}}</h3></td>
@@ -27,7 +27,7 @@
                                         <tr class="border-white">
                                             <td class="crest-col">
                                                 <div class="d-flex justify-content-center">
-                                                    <img [src]="teams[match.homeTeam.id].cc + '.svg'" class="crest">
+                                                    <img [src]="'/assets/flags/' + teams[match.homeTeam.id].cc + '.svg'" class="crest">
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-2">
                                                     <span class="score">{{match.finalScore.homeTeam}}</span>
@@ -50,7 +50,7 @@
                                             </td>
                                             <td class="crest-col">
                                                 <div class="d-flex justify-content-center">
-                                                    <img [src]="teams[match.awayTeam.id].cc + '.svg'" class="crest">
+                                                    <img [src]="'/assets/flags/' + teams[match.awayTeam.id].cc + '.svg'" class="crest">
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-2">
                                                     <span class="score">{{match.finalScore.awayTeam}}</span>
@@ -75,9 +75,9 @@
     <ng-template #matchModal let-modal>
         <div class="modal-header d-flex justify-content-between">
             <h4 class="modal-title flex-fill text-center">
-                <img [src]="teams[currentMatch.homeTeam.id].cc + '.svg'" class="crest">
+                <img [src]="'/assets/flags/' + teams[currentMatch.homeTeam.id].cc + '.svg'" class="crest">
                 <span class="mx-2">{{currentMatch.homeTeam.name}} vs. {{currentMatch.awayTeam.name}}</span>
-                <img [src]="teams[currentMatch.awayTeam.id].cc + '.svg'" class="crest">
+                <img [src]="'/assets/flags/' + teams[currentMatch.awayTeam.id].cc + '.svg'" class="crest">
             </h4>
             <button type="button" class="btn close" (click)="modal.dismiss('Cross click')">
                 <span>&times;</span>
@@ -98,14 +98,14 @@
                 <tbody>
                     <tr>
                         <td></td>
-                        <td><img [src]="teams[currentMatch.homeTeam.id].cc + '.svg'" class="crest"></td>
+                        <td><img [src]="'/assets/flags/' + teams[currentMatch.homeTeam.id].cc + '.svg'" class="crest"></td>
                         <td>
                             <span class="d-block text-decoration-underline">Spiel {{currentMatch.number}}</span>
                             <span class="d-block"><b>{{currentMatch.utcDate | date: 'shortDate'}}</b></span>
                             <span class="d-block"><b>{{currentMatch.utcDate | date: 'shortTime'}} Uhr</b></span>
                             <span class="d-block">{{currentMatch.location}}</span>
                         </td>
-                        <td><img [src]="teams[currentMatch.awayTeam.id].cc + '.svg'" class="crest"></td>
+                        <td><img [src]="'/assets/flags/' + teams[currentMatch.awayTeam.id].cc + '.svg'" class="crest"></td>
                     </tr>
                     <tr>
                         <td class="border-0">Dein Tipp:</td>
@@ -124,9 +124,9 @@
             <table class="table text-center vertical-align-middle">
                 <thead>
                     <tr>
-                        <th><img [src]="teams[currentMatch.homeTeam.id].cc + '.svg'" class="crest"></th>
+                        <th><img [src]="'/assets/flags/' + teams[currentMatch.homeTeam.id].cc + '.svg'" class="crest"></th>
                         <th></th>
-                        <th><img [src]="teams[currentMatch.awayTeam.id].cc + '.svg'" class="crest"></th>
+                        <th><img [src]="'/assets/flags/' + teams[currentMatch.awayTeam.id].cc + '.svg'" class="crest"></th>
                     </tr>
                     <tr class="alert-warning">
                         <th>Sieg</th>
@@ -182,8 +182,8 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th><img [src]="teams[currentMatch.homeTeam.id].cc + '.svg'" class="crest m-2"></th>
-                            <th><img [src]="teams[currentMatch.awayTeam.id].cc + '.svg'" class="crest m-2"></th>
+                            <th><img [src]="'/assets/flags/' + teams[currentMatch.homeTeam.id].cc + '.svg'" class="crest m-2"></th>
+                            <th><img [src]="'/assets/flags/' + teams[currentMatch.awayTeam.id].cc + '.svg'" class="crest m-2"></th>
                         </tr>
                     </thead>
                     <tbody>
