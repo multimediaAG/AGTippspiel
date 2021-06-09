@@ -23,7 +23,7 @@ class UserController {
   public static listExperts = async (req: Request, res: Response) => {
     const userRepository = getRepository(User);
     const experts = await userRepository.find({ relations: ["tips"], where: { isExpert: true } });
-    res.send(experts);
+    res.send(experts.sort((a, b) => (a.expertIndex || 100) - (b.expertIndex || 100)));
   }
 
   public static serveExpertPicture = async (req: Request, res: Response) => {
@@ -208,7 +208,7 @@ class UserController {
 
   public static changeExpertInfo = async (req: Request, res: Response) => {
     const id = req.params.id;
-    const { text, position } = req.body;
+    const { text, position, index } = req.body;
 
     const userRepository = getRepository(User);
     try {
@@ -223,6 +223,7 @@ class UserController {
       }
       user.expertText = text.trim();
       user.expertPosition = position.trim();
+      user.expertIndex = index;
       await userRepository.save(user);
     } catch (e) {
       res.status(500).send({message: "Konnte die Info nicht ändern!"});

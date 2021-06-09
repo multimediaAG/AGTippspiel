@@ -39,6 +39,9 @@ export class User {
   @Column({default: ""})
   public expertPosition: string;
 
+  @Column({default: 100})
+  public expertIndex: number;
+
   @Column({select: false})
   public password: string;
 
