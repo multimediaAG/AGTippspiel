@@ -101,6 +101,7 @@ export class Season {
 
 export class Team {
     id: number;
+    cc: string;
     area: {
         id: number;
         name: string;

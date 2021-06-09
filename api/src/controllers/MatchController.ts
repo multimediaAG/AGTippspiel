@@ -54,31 +54,31 @@ const LOCATIONS = {
     325077: "London",
 };
 
-export const COUNTRIES = {
-    "Turkey": "Türkei",
-    "Italy": "Italien",
-    "Wales": "Wales",
-    "Switzerland": "Schweiz",
-    "Denmark": "Dänemark",
-    "Finland": "Finnland",
-    "Belgium": "Belgien",
-    "Russia": "Russland",
-    "England": "England",
-    "Croatia": "Kroatien",
-    "Austria": "Österreich",
-    "North Macedonia": "Nordmazedonien",
-    "Netherlands": "Niederlande",
-    "Ukraine": "Ukraine",
-    "Scotland": "Schottland",
-    "Czech Republic": "Tschechien",
-    "Poland": "Polen",
-    "Slovakia": "Slowakei",
-    "Spain": "Spanien",
-    "Sweden": "Schweden",
-    "Hungary": "Ungarn",
-    "Portugal": "Portugal",
-    "France": "Frankreich",
-    "Germany": "Deutschland",
+export const COUNTRIES: Record<string, {name: string, cc: string}> = {
+    "Turkey": { name: "Türkei", cc: "tr" },
+    "Italy": { name: "Italien", cc: "it" },
+    "Wales": { name: "Wales", cc: "gb-wls" },
+    "Switzerland": { name: "Schweiz", cc: "ch" },
+    "Denmark": { name: "Dänemark", cc: "dk" },
+    "Finland": { name: "Finnland", cc: "fi" },
+    "Belgium": { name: "Belgien", cc: "be" },
+    "Russia": { name: "Russland", cc: "ru" },
+    "England": { name: "England", cc: "gb" },
+    "Croatia": { name: "Kroatien", cc: "hr" },
+    "Austria": { name: "Österreich", cc: "at" },
+    "North Macedonia": { name: "Nordmazedonien", cc: "mk" },
+    "Netherlands": { name: "Niederlande", cc: "nl" },
+    "Ukraine": { name: "Ukraine", cc: "ua" },
+    "Scotland": { name: "Schottland", cc: "gb-sct" },
+    "Czech Republic": { name: "Tschechien", cc: "cz" },
+    "Poland": { name: "Polen", cc: "pl" },
+    "Slovakia": { name: "Slowakei", cc: "sk" },
+    "Spain": { name: "Spanien", cc: "es" },
+    "Sweden": { name: "Schweden", cc: "se" },
+    "Hungary": { name: "Ungarn", cc: "hu" },
+    "Portugal": { name: "Portugal", cc: "pt" },
+    "France": { name: "Frankreich", cc: "fr" },
+    "Germany": { name: "Deutschland", cc: "de" },
 }
 
 import fetch from "node-fetch";
@@ -261,8 +261,8 @@ export class MatchController {
                 awayTeam: m.score.penalties.awayTeam ?? m.score.extraTime.awayTeam ?? m.score.fullTime.awayTeam,
             };
             m.location = LOCATIONS[m.id] || "";
-            m.homeTeam.name = COUNTRIES[m.homeTeam.name];
-            m.awayTeam.name = COUNTRIES[m.awayTeam.name];
+            m.homeTeam.name = COUNTRIES[m.homeTeam.name]?.name;
+            m.awayTeam.name = COUNTRIES[m.awayTeam.name]?.name;
             m.myTip = {
                 awayTeam: null,
                 homeTeam: null,
@@ -328,6 +328,10 @@ export class MatchController {
             },
         });
         this.teams = (await request.json())?.teams || this.teams || [];
+        this.teams = this.teams.map((t) => {
+            t.cc = COUNTRIES[t.name].cc;
+            return t;
+        });
     }
 
     public static updateTip = async (req: Request, res: Response) => {
