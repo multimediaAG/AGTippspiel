@@ -109,6 +109,7 @@
 /* do not edit */ 
 /* do not edit */ export class Team {
 /* do not edit */     id: number;
+/* do not edit */     cc: string;
 /* do not edit */     area: {
 /* do not edit */         id: number;
 /* do not edit */         name: string;
