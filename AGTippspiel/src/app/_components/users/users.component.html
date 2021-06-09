@@ -66,6 +66,10 @@
                 <div class="col">
                     <label for="position" class="form-label">Experten-Position:</label>
                     <textarea class="form-control" id="position" rows="3" placeholder="Z.B. Lehrkraft für Mathematik" [(ngModel)]="currentExpert.expertPosition"></textarea>
+                    
+                    <label for="index" class="form-label">Experten-Index:</label>
+                    <input type="number" class="form-control" id="index" placeholder="0 - 10000" [(ngModel)]="currentExpert.expertIndex">
+                    <small>Je kleiner der Index, desto weiter oben erscheint der Experte in der Liste.</small>
                 </div>
                 <div class="col">
                     <label for="text" class="form-label">Experten-Spruch:</label>

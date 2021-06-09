@@ -41,6 +41,9 @@
 /* do not edit */   public expertPosition: string;
 /* do not edit */
 /* do not edit */   
+/* do not edit */   public expertIndex: number;
+/* do not edit */
+/* do not edit */   
 /* do not edit */   public password: string;
 /* do not edit */
 /* do not edit */   
