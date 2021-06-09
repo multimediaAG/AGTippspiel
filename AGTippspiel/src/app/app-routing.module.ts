@@ -52,6 +52,7 @@ const routes: Routes = [
     {
         path: "scores",
         component: ScoresComponent,
+        canActivate: [AuthenticationGuard],
     },
     {
         path: "**",
