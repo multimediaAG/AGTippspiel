@@ -26,10 +26,10 @@
                         <tr *ngFor="let user of users">
                             <td>{{user.place}}</td>
                             <td *ngIf="currentView.id != 'grades-absolute' && currentView.id != 'grades-relative'">
-                                <ng-container *ngIf="user.showRealName">
+                                <ng-container *ngIf="user.showRealName || user.isExpert">
                                     {{user.realName}} <span class="text-muted">(<i>{{user.username}}</i>)</span>
                                 </ng-container>
-                                <ng-container *ngIf="!user.showRealName">
+                                <ng-container *ngIf="!(user.showRealName || user.isExpert)">
                                     <i>{{user.username}}</i>
                                 </ng-container>
                             </td>

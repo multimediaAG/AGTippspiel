@@ -13,7 +13,7 @@ export class SettingsComponent {
     showRealName: boolean;
 
     constructor(private remoteService: RemoteService, private alertService: AlertService,
-        private authenticationService: AuthenticationService) {
+        public authenticationService: AuthenticationService) {
         this.showRealName = this.authenticationService.currentUser.showRealName;
     }
 
