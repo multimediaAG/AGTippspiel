@@ -42,13 +42,15 @@ export class ScoresComponent {
         },
     ];
     public currentView = this.views[0];
+    private experts: { count: number; totalTips: number; points: number; };
     constructor(private remoteService: RemoteService,
         public authenticationService: AuthenticationService) { }
 
     public ngOnInit() {
-        this.remoteService.get("users").subscribe((data) => {
-            if (data) {
-                this.allUsers = data;
+        this.remoteService.get("users").subscribe((data: {users: User[], experts: { count: number, totalTips: number, points: number }}) => {
+            if (data && data.users && data.experts) {
+                this.allUsers = data.users;
+                this.experts = data.experts;
                 this.filterAndDisplayData();
             }
         });
@@ -62,15 +64,17 @@ export class ScoresComponent {
 
     private filterAndDisplayData() {
         if (this.currentView.id == "all") {
-            this.users = this.allUsers;
+            this.users = [...this.allUsers];
+            this.addExpertAverageUser();
         } else if (this.currentView.id == "students") {
             this.users = this.allUsers.filter((u) => u.grade.length < 4);
-        } else if (this.currentView.id == "ravk") {
-            this.users = this.allUsers.filter((u) => u.grade == "RAVK");
+            this.addExpertAverageUser();
         } else if (this.currentView.id == "teachers") {
             this.users = this.allUsers.filter((u) => u.grade.length > 4 && u.grade != "Eltern");
+            this.addExpertAverageUser();
         } else if (this.currentView.id == "parents") {
             this.users = this.allUsers.filter((u) => u.grade == "Eltern");
+            this.addExpertAverageUser();
         } else if (this.currentView.id == "grades-relative" || this.currentView.id == "grades-absolute") {
             const grades: Record<string, { points: number, users: number }> = {};
             for (const user of this.allUsers) {
@@ -84,11 +88,6 @@ export class ScoresComponent {
                 grades[user.grade].users++;
             }
 
-            grades.Experten = {
-                points: this.allUsers.filter((u) => u.isExpert).reduce((a, b) => a + b.points, 0),
-                users: this.allUsers.filter((u) => u.isExpert).length,
-            };
-
             this.users = [];
             for (const [grade, d] of Object.entries(grades) as any) {
                 let points = this.currentView.id == "grades-absolute" ? d.points : Math.round(d.points / d.users);
@@ -100,8 +99,19 @@ export class ScoresComponent {
                     points,
                 } as any);
             }
-            this.users.sort((a, b) => b.points - a.points);
+            if (this.currentView.id == "grades-absolute") {
+                this.users.push({
+                    grade: "Experten",
+                    points: this.experts.points,
+                } as any);
+            } else {
+                this.users.push({
+                    grade: "Experten",
+                    points: this.experts.points / this.experts.count,
+                } as any);
+            }
         }
+        this.users = this.users.sort((a, b) => b.points - a.points);
         let place = 1;
         let lastUser: User;
         for (const user of this.users) {
@@ -128,6 +138,17 @@ export class ScoresComponent {
             }
             this.placesCount = this.users[this.users.length - 1]?.place || 0;
         }
+    }
+
+    private addExpertAverageUser() {
+        this.users.push({
+            isExpert: true,
+            realName: "Experten",
+            username: "Team",
+            grade: "",
+            showRealName: true,
+            points: Math.round((this.experts.points / this.experts.count) * 10) / 10,
+        } as Partial<User> as User);
     }
 
     public view(v: {id: string, name: string}): void {
