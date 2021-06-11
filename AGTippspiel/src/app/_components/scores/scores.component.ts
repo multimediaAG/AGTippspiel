@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { RemoteService } from "../../_services/remote.service";
 import { AuthenticationService } from "../../_services/authentication.service";
 import { User } from "../../_models/User";
+import { Team } from "../../_models/Match";
 
 @Component({
     selector: "app-scores",
@@ -13,6 +14,7 @@ export class ScoresComponent {
     public allUsers: User[] = [];
     public myPlace: number;
     public placesCount: number;
+    public teams: Record<number, Team> = {};
     public views = [
         {
             id: "all",
@@ -48,6 +50,12 @@ export class ScoresComponent {
             if (data) {
                 this.allUsers = data;
                 this.filterAndDisplayData();
+            }
+        });
+        this.remoteService.get("matches/teams").subscribe((d: Team[]) => {
+            this.teams = {};
+            for (const team of d) {
+                this.teams[team.id] = team;
             }
         });
     }

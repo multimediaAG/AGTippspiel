@@ -27,6 +27,7 @@
                         <tr *ngFor="let user of users">
                             <td>{{user.place}}</td>
                             <td *ngIf="currentView.id != 'grades-absolute' && currentView.id != 'grades-relative'">
+                                <img *ngIf="user.champion" [src]="'/assets/flags/' + teams[user.champion].cc + '.svg'" class="mini-crest">
                                 <ng-container *ngIf="user.showRealName || user.isExpert">
                                     {{user.realName}} <span class="text-muted">(<i>{{user.username}}</i>)</span>
                                 </ng-container>
