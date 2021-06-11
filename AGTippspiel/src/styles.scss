@@ -27,3 +27,8 @@ input[type=number] {
 .text-left {
   text-align: left;
 }
+
+html {
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
