@@ -12,13 +12,21 @@ class UserController {
   public static listAll = async (req: Request, res: Response) => {
     const userRepository = getRepository(User);
     const users = await userRepository.find({ relations: ["tips"] });
-    res.send(users.map((u) => {
-      if (!u.showRealName && !u.isExpert) {
-        u.realName = undefined;
-      }
-      u.points = parseFloat(u.points as any as string);
-      return u;
-    }).sort((a, b) => b.points - a.points));
+    const experts = users.filter((u) => u.isExpert);
+    res.send({
+      users: users.map((u) => {
+        if (!u.showRealName && !u.isExpert) {
+          u.realName = undefined;
+        }
+        u.points = parseFloat(u.points as any as string);
+        return u;
+      }).sort((a, b) => b.points - a.points),
+      experts: {
+        count: experts.length,
+        points: experts.reduce((a, b) => a + b.points, 0),
+        totalTips: experts.map((u) => u.tips.length).reduce((a, b) => a + b, 0),
+      },
+    });
   }
   public static listExperts = async (req: Request, res: Response) => {
     const userRepository = getRepository(User);
