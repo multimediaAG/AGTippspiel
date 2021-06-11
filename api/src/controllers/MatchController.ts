@@ -273,7 +273,7 @@ export class MatchController {
                 m.utcDate = new Date(Date.now() + 20 * 1000).toISOString();
             } */
             const remainingTime = new Date(m.utcDate).getTime() - new Date().getTime();
-            if (remainingTime < MATCH_FETCH_TIME) {
+            if (0 < remainingTime && remainingTime < MATCH_FETCH_TIME) {
                 setTimeout(() => {
                     MatchController.updateMatchStatus(m);
                 }, remainingTime);
@@ -288,7 +288,11 @@ export class MatchController {
 
     private static updateMatchStatus(m: Match) {
         if (new Date(m.utcDate) < new Date()) {
-            m.status = MatchStatus.IN_PLAY;
+            if (m.score.winner) {
+                m.status = MatchStatus.FINISHED;
+            } else {
+                m.status = MatchStatus.IN_PLAY;
+            }
         }
     }
 
