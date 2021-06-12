@@ -111,6 +111,10 @@ export class ScoresComponent {
                 } as any);
             }
         }
+        this.users = this.users.map((u) => {
+            u.points = this.round(u.points);
+            return u;
+        });
         this.users = this.users.sort((a, b) => b.points - a.points);
         let place = 1;
         let lastUser: User;
@@ -147,8 +151,12 @@ export class ScoresComponent {
             username: "Team",
             grade: "",
             showRealName: true,
-            points: Math.round((this.experts.points / this.experts.count) * 10) / 10,
+            points: this.round(this.experts.points / this.experts.count),
         } as Partial<User> as User);
+    }
+
+    public round(v: number): number {
+        return Math.round(v * 10) / 10;
     }
 
     public view(v: {id: string, name: string}): void {
