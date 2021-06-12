@@ -59,6 +59,7 @@ export class User {
   public createdAt: Date;
 
   public place?: number;
+  public tipCount?: number;
 
   public hashPassword() {
     this.password = bcrypt.hashSync(this.password, 8);

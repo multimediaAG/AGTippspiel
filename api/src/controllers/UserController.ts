@@ -7,11 +7,13 @@ import * as path from "path";
 import * as fs from "fs";
 import { COUNTRIES, MatchController } from "./MatchController";
 import { CHAMPION_DEADLINE } from "../data/champion";
+import { MatchStatus } from "../entity/Match";
 
 class UserController {
   public static listAll = async (req: Request, res: Response) => {
     const userRepository = getRepository(User);
     const users = await userRepository.find({ relations: ["tips"] });
+    const finishedMatchIDs = MatchController.matches.filter((m) => m.status == MatchStatus.FINISHED).map((m) => m.id);
     const experts = users.filter((u) => u.isExpert);
     res.send({
       users: users.map((u) => {
@@ -19,6 +21,8 @@ class UserController {
           u.realName = undefined;
         }
         u.points = parseFloat(u.points as any as string);
+        u.tipCount = u.tips.filter((t) => finishedMatchIDs.includes(t.matchId)).length;
+        u.tips = [];
         return u;
       }).sort((a, b) => b.points - a.points),
       experts: {
