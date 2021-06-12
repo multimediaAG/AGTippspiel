@@ -29,6 +29,10 @@ export class ScoresComponent {
             name: "Eltern",
         },
         {
+            id: "ravk",
+            name: "RAVK",
+        },
+        {
             id: "teachers",
             name: "Lehrer",
         },
@@ -71,6 +75,9 @@ export class ScoresComponent {
             this.addExpertAverageUser();
         } else if (this.currentView.id == "teachers") {
             this.users = this.allUsers.filter((u) => u.grade.length > 4 && u.grade != "Eltern");
+            this.addExpertAverageUser();
+        } else if (this.currentView.id == "ravk") {
+            this.users = this.allUsers.filter((u) => u.grade == "RAVK");
             this.addExpertAverageUser();
         } else if (this.currentView.id == "parents") {
             this.users = this.allUsers.filter((u) => u.grade == "Eltern");
