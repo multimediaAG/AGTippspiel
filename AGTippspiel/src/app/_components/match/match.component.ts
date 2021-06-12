@@ -14,11 +14,14 @@ import { AlertService } from "../../_services/alert.service";
     styleUrls: ["./match.component.scss"],
 })
 export class MatchComponent implements OnInit {
-    public matches: Match[] = [];
+    public allMatches: Match[] = [];
+    public upcomingMatches: Match[] = [];
+    public finishedMatches: Match[] = [];
     public currentMatch: Match;
     public teams: Record<number, Team> = {};
     public experts: User[] = [];
     public untippedMatchCount = 0;
+    public showUpcomingMatches = true;
 
     public stageNames: Record<Stage, string> = {
         [Stage.GROUP_STAGE]: "Gruppenphase",
@@ -37,12 +40,26 @@ export class MatchComponent implements OnInit {
 
     public ngOnInit(): void {
         this.remoteService.get("matches").subscribe((d: Match[]) => {
-            this.matches = d.sort((a, b) => (new Date(a.utcDate) > new Date(b.utcDate)
+            this.allMatches = d.sort((a, b) => (new Date(a.utcDate) > new Date(b.utcDate)
                 ? 1
                 : a.utcDate == b.utcDate
                     ? 0
                     : -1
             ));
+            this.finishedMatches = this.allMatches.filter((m) => (
+                new Date().getTime() - new Date(m.utcDate).getTime()) > 0);
+            this.upcomingMatches = this.allMatches.filter((m) => {
+                const timeNow = new Date().getTime();
+                const matchDate = new Date(m.utcDate);
+                if ((timeNow - matchDate.getTime()) <= 0) {
+                    return true;
+                }
+                const diffDays = new Date().getDate() - matchDate.getDate();
+                const diffMonths = new Date().getMonth() - matchDate.getMonth();
+                const diffYears = new Date().getFullYear() - matchDate.getFullYear();
+
+                return (diffYears === 0 && diffMonths == 0 && diffDays === 0);
+            });
             this.updateUntippedCount();
         });
         this.remoteService.get("matches/teams").subscribe((d: Team[]) => {
@@ -57,7 +74,8 @@ export class MatchComponent implements OnInit {
     }
 
     private updateUntippedCount() {
-        this.untippedMatchCount = this.matches.filter((m) => m.status == MatchStatus.SCHEDULED
+        this.untippedMatchCount = this.upcomingMatches
+            .filter((m) => m.status == MatchStatus.SCHEDULED
             && (m.myTip.awayTeam === null
                 || m.myTip.homeTeam === null)
             && m.homeTeam?.id

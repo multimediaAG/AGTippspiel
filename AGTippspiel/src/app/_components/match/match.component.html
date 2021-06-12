@@ -1,16 +1,20 @@
 <div class="container">
     <div class="row">
         <div class="col-11 col-md-8 mx-auto card p-3 mt-5 text-center">
-            <div class="d-flex my-5 justify-content-center" *ngIf="matches.length == 0"><div class="spinner spinner-border text-primary"></div></div>
-                <ng-container *ngIf="matches.length > 0">
+            <div class="d-flex my-5 justify-content-center" *ngIf="allMatches.length == 0"><div class="spinner spinner-border text-primary"></div></div>
+                <ng-container *ngIf="allMatches.length > 0">
                     <div class="alert alert-primary" *ngIf="untippedMatchCount > 0">
                         Du hast für {{untippedMatchCount}} {{untippedMatchCount > 1 ? "ausstehende Spiele" : "ausstehendes Spiel"}} noch keinen Tipp abgegeben!<br>
                         Du kannst deinen Tipp auch noch nachträglich ändern.
                     </div>
+                    <div class="btn-group mb-2">
+                        <button [class]="(showUpcomingMatches ? 'btn-primary' : 'btn-outline-primary') + ' btn'" (click)="showUpcomingMatches = true">Ausstehende Spiele</button>
+                        <button [class]="(!showUpcomingMatches ? 'btn-primary' : 'btn-outline-primary') + ' btn'" (click)="showUpcomingMatches = false">Beendete Spiele</button>
+                      </div>
                     <div class="matches" *ngIf="(teams | keyvalue).length > 0">
                         <table class="table">
                             <tbody>
-                                <ng-container *ngFor="let match of matches">
+                                <ng-container *ngFor="let match of showUpcomingMatches ? upcomingMatches : finishedMatches">
                                     <ng-container *ngIf="match.homeTeam.id && match.awayTeam.id">
                                         <tr class="border-white">
                                             <td class="crest-col"><h3>{{match.homeTeam.name}}</h3></td>
