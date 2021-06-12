@@ -23,6 +23,9 @@ class UserController {
         u.points = parseFloat(u.points as any as string);
         u.tipCount = u.tips.filter((t) => finishedMatchIDs.includes(t.matchId)).length;
         u.tips = [];
+        if (new Date() < CHAMPION_DEADLINE) {
+          u.champion = null;
+        }
         return u;
       }).sort((a, b) => b.points - a.points),
       experts: {
