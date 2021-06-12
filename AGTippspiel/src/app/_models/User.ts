@@ -60,6 +60,7 @@
 /* do not edit */   public createdAt: Date;
 /* do not edit */
 /* do not edit */   public place?: number;
+/* do not edit */   public tipCount?: number;
 /* do not edit */
 /* do not edit */   
 /* do not edit */

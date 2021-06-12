@@ -76,21 +76,21 @@ export class ScoresComponent {
             this.users = this.allUsers.filter((u) => u.grade == "Eltern");
             this.addExpertAverageUser();
         } else if (this.currentView.id == "grades-relative" || this.currentView.id == "grades-absolute") {
-            const grades: Record<string, { points: number, users: number }> = {};
+            const grades: Record<string, { points: number, tipCount: number }> = {};
             for (const user of this.allUsers) {
                 if (!grades[user.grade]) {
                     grades[user.grade] = {
                         points: 0,
-                        users: 0,
+                        tipCount: user.tipCount,
                     };
                 }
                 grades[user.grade].points += user.points;
-                grades[user.grade].users++;
+                grades[user.grade].tipCount += user.tipCount;
             }
 
             this.users = [];
-            for (const [grade, d] of Object.entries(grades) as any) {
-                let points = this.currentView.id == "grades-absolute" ? d.points : Math.round(d.points / d.users);
+            for (const [grade, d] of Object.entries(grades)) {
+                let points = this.currentView.id == "grades-absolute" ? d.points : Math.round(d.points / d.tipCount);
                 if (Number.isNaN(points)) {
                     points = 0;
                 }
