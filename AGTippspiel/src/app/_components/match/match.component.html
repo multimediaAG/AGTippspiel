@@ -43,11 +43,12 @@
                                                     <b class="fs-5 d-block text-warning">{{match.status == 'SCHEDULED' ? 'Noch kein' : 'Kein'}} Tipp abgegeben!</b>
                                                     <button class="btn btn-outline-warning mt-3" *ngIf="match.status == 'SCHEDULED'" (click)="openMatchModal(match, matchModal)">Tipp abgeben</button>
                                                 </ng-container>
+                                                <button class="btn btn-outline-success mt-3 mx-2" (click)="openMatchModal(match, expertModal)">AG-Expertentipp ({{match.expertOdds.count.homeTeam}}:{{match.expertOdds.count.draw}}:{{match.expertOdds.count.awayTeam}})</button>
                                                 <ng-template #showTip>
                                                     <u class="fs-5 d-block mt-3 text-primary">Dein Tipp:</u>
                                                     <b class="fs-5 d-block text-primary">{{match.myTip.homeTeam}}:{{match.myTip.awayTeam}}</b>
                                                     <button class="btn btn-outline-primary mt-3" *ngIf="match.status == 'SCHEDULED'" (click)="openMatchModal(match, matchModal)">Tipp ändern</button>
-                                                    <ng-container *ngIf="match.status == 'FINISHED'" >
+                                                        <ng-container *ngIf="match.status == 'FINISHED'" >
                                                         <u class="fs-5 d-block mt-3 text-primary">Deine Punkte:</u>
                                                         <b class="fs-5 d-block text-primary">{{match.myPoints}}</b>
                                                     </ng-container>
@@ -77,20 +78,19 @@
         </div>
     </div>
     
-    <ng-template #matchModal let-modal>
-        <div class="modal-header d-flex justify-content-between">
-            <h4 class="modal-title flex-fill text-center">
-                <img [src]="'/assets/flags/' + teams[currentMatch.homeTeam.id].cc + '.svg'" class="crest">
-                <span class="mx-2">{{currentMatch.homeTeam.name}} vs. {{currentMatch.awayTeam.name}}</span>
-                <img [src]="'/assets/flags/' + teams[currentMatch.awayTeam.id].cc + '.svg'" class="crest">
-            </h4>
-            <button type="button" class="btn close" (click)="modal.dismiss('Cross click')">
-                <span>&times;</span>
+<ng-template #matchModal let-modal>
+    <div class="modal-header d-flex justify-content-between">
+        <h4 class="modal-title flex-fill text-center">
+            <img [src]="'/assets/flags/' + teams[currentMatch.homeTeam.id].cc + '.svg'" class="crest">
+            <span class="mx-2">{{currentMatch.homeTeam.name}} vs. {{currentMatch.awayTeam.name}}</span>
+            <img [src]="'/assets/flags/' + teams[currentMatch.awayTeam.id].cc + '.svg'" class="crest">
+        </h4>
+        <button type="button" class="btn close" (click)="modal.dismiss('Cross click')">
+            <span>&times;</span>
         </button>
     </div>
     <div class="modal-body">
-        <div class="card p-3 overflow-y-auto mb-4 bg-light">
-            <h4>Das Spiel:</h4>
+        <div class="">
             <table class="table text-center vertical-align-middle">
                 <thead>
                     <tr>
@@ -124,6 +124,21 @@
                 <button class="btn btn-outline-success" (click)="saveTip()"><i class="fas fa-check"></i> Speichern</button>
             </div>
         </div>
+    </div>
+</ng-template>
+
+<ng-template #expertModal let-modal>
+    <div class="modal-header d-flex justify-content-between">
+        <h4 class="modal-title flex-fill text-center">
+            <img [src]="'/assets/flags/' + teams[currentMatch.homeTeam.id].cc + '.svg'" class="crest">
+            <span class="mx-2">{{currentMatch.homeTeam.name}} vs. {{currentMatch.awayTeam.name}}</span>
+            <img [src]="'/assets/flags/' + teams[currentMatch.awayTeam.id].cc + '.svg'" class="crest">
+        </h4>
+        <button type="button" class="btn close" (click)="modal.dismiss('Cross click')">
+            <span>&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
         <div class="card p-3 overflow-y-auto mb-4">
             <h4>AG-Experten-Tipp:</h4>
             <table class="table text-center vertical-align-middle">
@@ -184,21 +199,21 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
                             <th><img [src]="'/assets/flags/' + teams[currentMatch.homeTeam.id].cc + '.svg'" class="crest m-2"></th>
                             <th><img [src]="'/assets/flags/' + teams[currentMatch.awayTeam.id].cc + '.svg'" class="crest m-2"></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let expert of experts">
                             <td><img class="expert-picture" [src]="getExpertPictureUrl(expert)"></td>
+                            <td><span class="score">{{currentMatch.expertTips[expert.id]?.homeTeam}}</span></td>
+                            <td><span class="score">{{currentMatch.expertTips[expert.id]?.awayTeam}}</span></td>
                             <td>{{expert.realName}}<br><span class="text-muted">(<i>{{expert.username}}</i>)</span></td>
                             <td>{{expert.expertPosition}}</td>
                             <td>{{expert.expertText}}</td>
-                            <td><span class="score">{{currentMatch.expertTips[expert.id]?.homeTeam}}</span></td>
-                            <td><span class="score">{{currentMatch.expertTips[expert.id]?.awayTeam}}</span></td>
                         </tr>
                     </tbody>
                 </table>
