@@ -24,7 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let user of users" [class.alert-success]="(user.realName == 'Experten' && user.username == 'Team') || (user.grade == 'Experten')">
+                        <tr *ngFor="let user of users" [class.alert-success]="(user.realName == 'Experten' && user.username == 'Team') || (user.grade == 'Experten')" [class.alert-info]="(authenticationService.currentUser.id == user.id) || (currentView.id.startsWith('grades') && authenticationService.currentUser.grade == user.grade)">
                             <td>{{user.place}}</td>
                             <td *ngIf="currentView.id != 'grades-absolute' && currentView.id != 'grades-relative'">
                                 <img *ngIf="user.champion" [src]="'/assets/flags/' + teams[user.champion].cc + '.svg'" class="mini-crest">
