@@ -114,7 +114,7 @@ export class ScoresComponent {
             } else {
                 this.users.push({
                     grade: "Experten",
-                    points: this.experts.points / this.experts.count,
+                    points: this.experts.points / this.experts.totalTips,
                 } as any);
             }
         }
