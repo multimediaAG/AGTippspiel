@@ -278,7 +278,6 @@ export class MatchController {
                     MatchController.updateMatchStatus(m);
                 }, remainingTime);
             }
-            MatchController.updateMatchStatus(m);
             return m;
         }) || MatchController.matches || [];
         if (this.matches.length > 0) {
