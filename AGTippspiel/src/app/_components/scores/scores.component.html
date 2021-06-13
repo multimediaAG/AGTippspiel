@@ -24,7 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let user of users" [class.alert-success]="user.realName == 'Experten' && user.username == 'Team'">
+                        <tr *ngFor="let user of users" [class.alert-success]="(user.realName == 'Experten' && user.username == 'Team') || (user.grade == 'Experten')">
                             <td>{{user.place}}</td>
                             <td *ngIf="currentView.id != 'grades-absolute' && currentView.id != 'grades-relative'">
                                 <img *ngIf="user.champion" [src]="'/assets/flags/' + teams[user.champion].cc + '.svg'" class="mini-crest">
