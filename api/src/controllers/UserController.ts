@@ -31,7 +31,7 @@ class UserController {
       experts: {
         count: experts.length,
         points: experts.reduce((a, b) => a + b.points, 0),
-        totalTips: experts.map((u) => u.tips.length).reduce((a, b) => a + b, 0),
+        totalTips: experts.map((u) => u.tipCount).reduce((a, b) => a + b, 0),
       },
     });
   }
