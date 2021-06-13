@@ -24,7 +24,7 @@
                                                 <span class="d-block">{{match.location}}</span>
                                                 <div class="crest-col-mobile">
                                                     <h3><img [src]="'/assets/flags/' + teams[match.homeTeam.id].cc + '.svg'" class="crest-small me-2">{{match.homeTeam.name}} <span class="text-muted">vs.</span> {{match.awayTeam.name}}<img [src]="'/assets/flags/' + teams[match.awayTeam.id].cc + '.svg'" class="crest-small ms-2"></h3>
-                                                    <h3 class="score" *ngIf="match.score.winner">{{match.finalScore.homeTeam}} : {{match.finalScore.awayTeam}}</h3>
+                                                    <h3 class="score" *ngIf="match.status == 'FINISHED'">{{match.finalScore.homeTeam}} : {{match.finalScore.awayTeam}}</h3>
                                                 </div>
                                             </td>
                                             <td class="crest-col"><h3>{{match.awayTeam.name}}</h3></td>
@@ -35,7 +35,7 @@
                                                     <img [src]="'/assets/flags/' + teams[match.homeTeam.id].cc + '.svg'" class="crest">
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-2">
-                                                    <span class="score">{{match.finalScore.homeTeam}}</span>
+                                                    <span class="score" *ngIf="match.status == 'FINISHED'">{{match.finalScore.homeTeam}}</span>
                                                 </div>
                                             </td>
                                             <td class="content-col">
@@ -59,7 +59,7 @@
                                                     <img [src]="'/assets/flags/' + teams[match.awayTeam.id].cc + '.svg'" class="crest">
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-2">
-                                                    <span class="score">{{match.finalScore.awayTeam}}</span>
+                                                    <span class="score" *ngIf="match.status == 'FINISHED'">{{match.finalScore.awayTeam}}</span>
                                                 </div>
                                             </td>
                                         </tr>
