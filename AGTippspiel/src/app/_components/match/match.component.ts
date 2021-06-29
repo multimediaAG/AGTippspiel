@@ -47,7 +47,7 @@ export class MatchComponent implements OnInit {
                     : -1
             ));
             this.finishedMatches = this.allMatches.filter((m) => (
-                new Date().getTime() - new Date(m.utcDate).getTime()) > 0);
+                new Date().getTime() - new Date(m.utcDate).getTime()) > 0).reverse();
             this.upcomingMatches = this.allMatches.filter((m) => {
                 const timeNow = new Date().getTime();
                 const matchDate = new Date(m.utcDate);
