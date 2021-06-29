@@ -97,7 +97,7 @@ export class ScoresComponent {
 
             this.users = [];
             for (const [grade, d] of Object.entries(grades)) {
-                let points = this.currentView.id == "grades-absolute" ? d.points : Math.round(d.points / d.tipCount);
+                let points = this.currentView.id == "grades-absolute" ? d.points : (Math.round((d.points / d.tipCount) * 10) / 10);
                 if (Number.isNaN(points)) {
                     points = 0;
                 }
