@@ -63,7 +63,7 @@ export const COUNTRIES: Record<string, {name: string, cc: string}> = {
     "Finland": { name: "Finnland", cc: "fi" },
     "Belgium": { name: "Belgien", cc: "be" },
     "Russia": { name: "Russland", cc: "ru" },
-    "England": { name: "England", cc: "gb" },
+    "England": { name: "England", cc: "gb-eng" },
     "Croatia": { name: "Kroatien", cc: "hr" },
     "Austria": { name: "Österreich", cc: "at" },
     "North Macedonia": { name: "Nordmazedonien", cc: "mk" },
