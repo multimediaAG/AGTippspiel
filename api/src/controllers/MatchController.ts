@@ -257,8 +257,8 @@ export class MatchController {
             } */
             m.number = i + 1;
             m.finalScore = {
-                homeTeam: m.score.penalties.homeTeam ?? m.score.extraTime.homeTeam ?? m.score.fullTime.homeTeam,
-                awayTeam: m.score.penalties.awayTeam ?? m.score.extraTime.awayTeam ?? m.score.fullTime.awayTeam,
+                homeTeam: m.score.fullTime.homeTeam,
+                awayTeam: m.score.fullTime.awayTeam,
             };
             m.location = LOCATIONS[m.id] || "";
             m.homeTeam.name = COUNTRIES[m.homeTeam.name]?.name;
